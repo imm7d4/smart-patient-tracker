@@ -28,7 +28,7 @@ Smart Patient Tracker is a full-stack healthcare application designed to facilit
 - 🔐 End-to-end AES encryption for all data
 - 👥 Role-based access control (RBAC)
 - 📊 Real-time patient monitoring and risk assessment
-- 💬 Secure messaging system
+- 💬 Real-time encrypted chat system for patient-doctor communication
 - 📈 Analytics dashboard for administrators
 - 🔔 Automated alert system for high-risk patients
 
@@ -37,13 +37,22 @@ Smart Patient Tracker is a full-stack healthcare application designed to facilit
 ### For Patients
 - **Daily Health Check-ins:** Track vital signs (pain level, temperature, medication adherence)
 - **Treatment Plan Viewing:** Access assigned treatment plans and schedules
-- **Secure Messaging:** Communicate with healthcare providers
+- **Real-time Chat:** Secure, encrypted messaging with assigned doctors
+  - Send and receive messages instantly
+  - View conversation history
+  - End-to-end encryption for all messages
+  - Chat with multiple doctors if assigned
 - **Profile Management:** Update personal information and preferences
 - **Consent Management:** Control data monitoring permissions
 
 ### For Doctors
 - **Patient Dashboard:** Overview of all patients with risk-based sorting
 - **Treatment Plan Management:** Create and manage comprehensive treatment plans
+- **Real-time Chat:** Secure communication with patients
+  - Respond to patient inquiries instantly
+  - Access complete chat history
+  - Encrypted messaging for HIPAA compliance
+  - Manage conversations with multiple patients
 - **Alert System:** Real-time notifications for high-risk patients
 - **Patient Details:** Access complete patient history and check-in data
 - **Risk Assessment:** Automatic calculation and tracking of patient risk scores
@@ -158,12 +167,14 @@ Password: password123
 
 ### Patient
 - **Routes:** `/patient/*`, `/chat`
-- **Permissions:** Personal data access, check-ins, messaging
+- **Permissions:** Personal data access, check-ins, real-time chat with doctors
+- **Chat Access:** Can initiate and view conversations with assigned doctors only
 - **Restrictions:** Cannot access doctor or admin routes
 
 ### Doctor
 - **Routes:** `/doctor/*`, `/chat`
-- **Permissions:** Patient management, treatment plans, alerts
+- **Permissions:** Patient management, treatment plans, alerts, chat with patients
+- **Chat Access:** Can view and respond to all patient messages
 - **Restrictions:** Cannot access admin routes
 
 ### Admin
@@ -214,6 +225,13 @@ POST /api/treatments              - Create treatment plan
 GET  /api/treatments              - Get treatment plans
 GET  /api/treatments/:id          - Get specific plan
 PUT  /api/treatments/:id/consent  - Update consent
+```
+
+### Chat Endpoints
+```
+GET  /api/chat/conversations     - Get all conversations for user
+GET  /api/chat/messages/:userId  - Get messages with specific user
+POST /api/chat/messages          - Send a new message
 ```
 
 ### Admin Endpoints
