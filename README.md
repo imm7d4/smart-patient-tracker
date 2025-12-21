@@ -9,16 +9,16 @@ A comprehensive healthcare management system for post-operative patient monitori
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [User Roles](#user-roles)
-- [Security](#security)
-- [API Documentation](#api-documentation)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
+- [Overview](#-overview)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Getting Started](#-getting-started)
+- [User Roles](#-user-roles)
+- [Security](#-security)
+- [API Documentation](#-api-documentation)
+- [Project Structure](#-project-structure)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ## 🎯 Overview
 
