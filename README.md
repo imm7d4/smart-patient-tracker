@@ -75,6 +75,11 @@ Smart Patient Tracker is a full-stack healthcare application designed to facilit
 
 **Backend:**
 - Node.js & Express
+- **Architecture:** Controller-Service-Repository (CSR) Pattern
+  - **Controllers:** Handle HTTP requests/responses with basic validation
+  - **Services:** Contain business logic and orchestrate repositories
+  - **Repositories:** Manage all database interactions
+  - **Utils:** Reusable helper functions (JWT, validation, date operations)
 - MongoDB with Mongoose
 - JWT for authentication
 - CryptoJS for encryption
@@ -259,21 +264,115 @@ smart-patient-tracker/
 │   │   └── utils/         # Utilities
 │   └── package.json
 │
-└── server/                # Node.js backend
-    ├── controllers/       # Business logic
+└── server/                # Node.js backend (CSR Pattern)
+    ├── controllers/       # HTTP request handlers (thin layer)
+    │   ├── AuthController.js
+    │   ├── TreatmentController.js
+    │   ├── CheckInController.js
+    │   ├── AlertController.js
+    │   ├── ChatController.js
+    │   ├── AdminController.js
+    │   ├── ProfileController.js
+    │   └── UserController.js
+    │
+    ├── services/          # Business logic layer
+    │   ├── AuthService.js
+    │   ├── TreatmentService.js
+    │   ├── CheckInService.js
+    │   ├── AlertService.js
+    │   ├── chatService.js
+    │   ├── AdminService.js
+    │   ├── ProfileService.js
+    │   ├── UserService.js
+    │   ├── riskEngine.service.js
+    │   └── cron.service.js
+    │
+    ├── repositories/      # Database interaction layer
+    │   ├── UserRepository.js
+    │   ├── TreatmentPlanRepository.js
+    │   ├── DailyCheckInRepository.js
+    │   ├── AlertRepository.js
+    │   ├── ConversationRepository.js
+    │   ├── MessageRepository.js
+    │   ├── PatientProfileRepository.js
+    │   ├── AuditLogRepository.js
+    │   └── index.js
+    │
+    ├── utils/             # Helper functions
+    │   ├── jwt.util.js           # JWT token operations
+    │   ├── date.util.js          # Date utilities
+    │   └── validation.util.js    # Input validation
+    │
     ├── middleware/        # Custom middleware
+    │   ├── auth.js
+    │   ├── authorizeRole.js
+    │   ├── chatMiddleware.js
+    │   ├── encryptionMiddleware.js
+    │   └── auditMiddleware.js
+    │
     ├── models/           # MongoDB schemas
-    ├── routes/           # API routes
-    ├── services/         # Background services
+    │   ├── User.js
+    │   ├── TreatmentPlan.js
+    │   ├── DailyCheckIn.js
+    │   ├── Alert.js
+    │   ├── Conversation.js
+    │   ├── Message.js
+    │   ├── PatientProfile.js
+    │   └── AuditLog.js
+    │
+    ├── routes/           # API route definitions
+    │   ├── auth.js
+    │   ├── treatments.js
+    │   ├── checkins.js
+    │   ├── alerts.js
+    │   ├── chat.js
+    │   ├── admin.js
+    │   ├── profile.js
+    │   └── users.js
+    │
     └── server.js         # Entry point
-```
+
+### Backend Architecture Principles
+
+**Controller-Service-Repository (CSR) Pattern:**
+
+1. **Controllers** (Thin Layer - < 100 lines each)
+   - Handle HTTP requests and responses
+   - Perform basic shape validation (required fields, types)
+   - Delegate to services for business logic
+   - **Never** call repositories directly
+   - **Never** contain business validation
+
+2. **Services** (Business Logic - < 300 lines each)
+   - Contain all business logic and validation
+   - Orchestrate multiple repositories when needed
+   - Handle authorization checks
+   - Enforce business rules
+   - Use utility functions for common operations
+
+3. **Repositories** (Data Layer - < 200 lines each)
+   - Handle all database interactions (CRUD)
+   - Encapsulate Mongoose queries
+   - **Never** call other repositories
+   - Return plain data (no business logic)
+
+4. **Utils** (Helpers - < 100 lines each)
+   - Reusable helper functions
+   - JWT operations, date formatting, validation
+   - Keep services clean and DRY
+
+**Architecture Rules:**
+- ❌ Controllers MUST NOT call repositories directly
+- ❌ Repositories MUST NOT call other repositories
+- ❌ Business validation belongs in services, not controllers
+- ✅ Services orchestrate repositories
+- ✅ Controllers only perform basic shape validation
 
 ## 🧪 Testing
 
 ### Manual Testing Checklist
 
 - [ ] User registration and login
-- [ ] Role-based access control
 - [ ] Patient check-in submission
 - [ ] Treatment plan creation
 - [ ] Alert system functionality
