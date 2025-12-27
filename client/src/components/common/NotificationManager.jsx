@@ -55,6 +55,7 @@ const NotificationManager = () => {
 
       // Find any conversation with new message since last check
       // AND last message sender is NOT me
+      // eslint-disable-next-line max-len
       // AND last message is newer than my read status (if implemented) or just simpler check against time
 
       const lastCheck = lastCheckRef.current;

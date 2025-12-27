@@ -151,7 +151,14 @@ const CreateTreatment = () => {
               </Grid>
             </Grid>
           ))}
-          <Button startIcon={<AddIcon />} onClick={addMedication} sx={{mb: 2}}>Add Medication</Button>
+              // eslint-disable-next-line max-len
+          <Button
+            startIcon={<AddIcon />}
+            onClick={addMedication}
+            sx={{mb: 2}}
+          >
+            Add Medication
+          </Button>
 
           <TextField fullWidth label="Symptoms to Track (comma separated)" name="symptomChecklist" value={formData.symptomChecklist} onChange={handleChange} margin="normal" />
 

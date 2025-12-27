@@ -1,12 +1,12 @@
-import { useContext, useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import {useContext, useState} from 'react';
+import {AppBar, Toolbar, Typography, Button, Box, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions} from '@mui/material';
+import {Link, useNavigate} from 'react-router-dom';
 import AuthContext from '@/context/AuthContext';
-import { USER_ROLES } from '@/constants';
+import {USER_ROLES} from '@/constants';
 
 const Navbar = () => {
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
-  const { user, logout } = useContext(AuthContext);
+  const {user, logout} = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogoutClick = () => {
@@ -22,7 +22,7 @@ const Navbar = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}>
+        <Typography variant="h6" component={Link} to="/" sx={{flexGrow: 1, textDecoration: 'none', color: 'inherit'}}>
           Smart Recovery
         </Typography>
         <Box>
@@ -63,7 +63,7 @@ const Navbar = () => {
                 <Button color="inherit" component={Link} to="/admin/dashboard">Admin Dashboard</Button>
               )}
 
-              <Button color="inherit" onClick={handleLogoutClick} sx={{ ml: 2, border: '1px solid rgba(255,255,255,0.3)' }}>
+              <Button color="inherit" onClick={handleLogoutClick} sx={{ml: 2, border: '1px solid rgba(255,255,255,0.3)'}}>
                 Logout ({user.name})
               </Button>
             </>

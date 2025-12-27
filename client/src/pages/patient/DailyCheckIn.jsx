@@ -113,10 +113,10 @@ const DailyCheckIn = () => {
       <Box sx={{textAlign: 'center', mb: 4}}>
         <EventAvailable sx={{fontSize: 56, color: 'primary.main', mb: 2}} />
         <Typography variant="h3" fontWeight={700} gutterBottom>
-                    Daily Recovery Check-In
+          Daily Recovery Check-In
         </Typography>
         <Typography variant="body1" color="text.secondary">
-                    Track your recovery progress and help your care team monitor your health
+          Track your recovery progress and help your care team monitor your health
         </Typography>
       </Box>
 
@@ -256,7 +256,7 @@ const DailyCheckIn = () => {
                 loading={loading}
                 sx={{width: {xs: '100%', sm: 'auto'}, px: 6}}
               >
-                                Submit Check-In
+                Submit Check-In
               </AuthButton>
             </Grid>
           </Grid>
@@ -267,7 +267,7 @@ const DailyCheckIn = () => {
       {history.length > 0 && (
         <>
           <Typography variant="h5" align="center" sx={{mb: 3, fontWeight: 600}}>
-                        Previous Check-Ins
+            Previous Check-Ins
           </Typography>
           <Grid container spacing={3}>
             {history.map((checkin) => (
@@ -283,10 +283,11 @@ const DailyCheckIn = () => {
                   subtitle={
                     <Box sx={{mt: 1}}>
                       <Typography variant="body2" sx={{mb: 0.5}}>
-                                                Pain: {checkin.painLevel}/10 | Temp: {checkin.temperature}°F
+                        Pain: {checkin.painLevel}/10 | Temp:{' '}
+                        {checkin.temperature}°F
                       </Typography>
                       <Typography variant="body2" sx={{mb: 0.5}}>
-                                                Meds: {checkin.medicationsTaken ? '✓ Taken' : '✗ Not Taken'}
+                        Meds: {checkin.medicationsTaken ? '✓ Taken' : '✗ Not Taken'}
                       </Typography>
                       {checkin.riskReasons && checkin.riskReasons.length > 0 && (
                         <Box sx={{mt: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
@@ -330,20 +331,20 @@ const DailyCheckIn = () => {
         <DialogTitle sx={{textAlign: 'center', pt: 4}}>
           <EmojiEvents sx={{fontSize: 72, color: '#ffd700', mb: 2}} />
           <Typography variant="h4" fontWeight={700}>
-                        Milestone Unlocked!
+            Milestone Unlocked!
           </Typography>
         </DialogTitle>
         <DialogContent sx={{textAlign: 'center', pb: 2}}>
           <Typography variant="h5" color="primary" fontWeight={600}>
-                        🎉 {getMilestoneText(milestoneModal.milestone)}
+            🎉 {getMilestoneText(milestoneModal.milestone)}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{mt: 2}}>
-                        Keep up the great work on your recovery journey!
+            Keep up the great work on your recovery journey!
           </Typography>
         </DialogContent>
         <DialogActions sx={{justifyContent: 'center', pb: 3}}>
           <AuthButton onClick={() => setMilestoneModal({open: false, milestone: null})}>
-                        Continue
+            Continue
           </AuthButton>
         </DialogActions>
       </Dialog>

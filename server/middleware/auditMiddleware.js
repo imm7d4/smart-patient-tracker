@@ -35,7 +35,7 @@ const auditLogger = async (req, res, next) => {
 
   res.on('finish', () => {
     // Filter out sensitive data from logging
-    const body = { ...req.body };
+    const body = {...req.body};
     if (body.password) body.password = '[REDACTED]';
 
     // Don't log internal health checks or static if any

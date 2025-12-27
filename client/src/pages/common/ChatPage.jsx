@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import {
   Box, Grid, Paper, Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar,
   Divider, TextField, IconButton, Badge, CircularProgress, Alert, Fab, Dialog, DialogTitle,
@@ -11,7 +11,7 @@ import AuthContext from '@/context/AuthContext';
 import chatService from '@/services/chatService';
 
 const ChatPage = () => {
-  const { user } = useContext(AuthContext);
+  const {user} = useContext(AuthContext);
   const theme = useTheme();
   const [conversations, setConversations] = useState([]);
   const [activeConversation, setActiveConversation] = useState(null);
@@ -73,7 +73,7 @@ const ChatPage = () => {
       const res = await chatService.getConversations();
       setConversations(res.data.data);
       setLoading(false);
-    } catch (_err) {
+    } catch {
       setLoading(false);
     }
   };
@@ -135,7 +135,7 @@ const ChatPage = () => {
   };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({behavior: 'smooth'});
   };
 
   const getOtherParticipant = (conv) => {
@@ -143,7 +143,7 @@ const ChatPage = () => {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return new Date(dateString).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
   };
 
   const handleStartChat = async (targetUserId) => {
@@ -232,7 +232,7 @@ const ChatPage = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, height: 'calc(100vh - 100px)', p: 3, overflow: 'hidden', bgcolor: '#f0f2f5' }}>
+    <Box sx={{flexGrow: 1, height: 'calc(100vh - 100px)', p: 3, overflow: 'hidden', bgcolor: '#f0f2f5'}}>
       <Paper
         elevation={6}
         sx={{
@@ -256,7 +256,7 @@ const ChatPage = () => {
             p={3}
             borderBottom={1}
             borderColor="divider"
-            sx={{ bgcolor: theme.palette.primary.main, color: 'white' }}
+            sx={{bgcolor: theme.palette.primary.main, color: 'white'}}
           >
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
               <Typography variant="h6" fontWeight="bold">Messages</Typography>
@@ -264,7 +264,7 @@ const ChatPage = () => {
                 <IconButton
                   size="small"
                   onClick={() => setOpenNewChat(true)}
-                  sx={{ 'bgcolor': 'rgba(255,255,255,0.2)', 'color': 'white', '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }}
+                  sx={{'bgcolor': 'rgba(255,255,255,0.2)', 'color': 'white', '&:hover': {bgcolor: 'rgba(255,255,255,0.3)'}}}
                 >
                   <AddIcon />
                 </IconButton>
@@ -281,7 +281,7 @@ const ChatPage = () => {
                 'borderRadius': 1,
                 '& .MuiOutlinedInput-root': {
                   'color': 'white',
-                  '& fieldset': { border: 'none' },
+                  '& fieldset': {border: 'none'},
                 },
                 '& .MuiInputBase-input::placeholder': {
                   color: 'rgba(255,255,255,0.7)',
@@ -290,76 +290,76 @@ const ChatPage = () => {
               }}
             />
           </Box>
-          <List sx={{ overflowY: 'auto', flexGrow: 1, py: 0 }}>
+          <List sx={{overflowY: 'auto', flexGrow: 1, py: 0}}>
             {conversations
-              .filter((conv) => {
-                const other = getOtherParticipant(conv);
-                return other.name?.toLowerCase().includes(searchQuery.toLowerCase());
-              })
-              .length === 0 ? (
-              <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100%" p={3} textAlign="center" color="text.secondary">
-                <ChatBubbleOutlineIcon sx={{ fontSize: 40, mb: 1, opacity: 0.5 }} />
-                <Typography variant="body2">No conversations found.</Typography>
-              </Box>
-            ) : (
-              conversations
                 .filter((conv) => {
                   const other = getOtherParticipant(conv);
                   return other.name?.toLowerCase().includes(searchQuery.toLowerCase());
                 })
-                .map((conv) => {
-                  const other = getOtherParticipant(conv);
-                  const isSelected = activeConversation?._id === conv._id;
-                  return (
-                    <ListItemButton
-                      key={conv._id}
-                      selected={isSelected}
-                      onClick={() => setActiveConversation(conv)}
-                      sx={{
-                        'py': 2,
-                        'px': 3,
-                        'borderLeft': isSelected ? 4 : 0,
-                        'borderColor': 'primary.main',
-                        // Explicit background for selection to ensure contrast
-                        'bgcolor': isSelected ? 'rgba(25, 118, 210, 0.08)' : 'transparent',
-                        'transition': 'all 0.2s',
-                        '&:hover': { bgcolor: 'rgba(0,0,0,0.04)' },
-                      }}
-                    >
-                      <ListItemAvatar>
-                        <Avatar
-                          alt={other.name}
-                          src="/static/images/avatar/1.jpg"
-                          sx={{
-                            bgcolor: isSelected ? 'primary.main' : 'grey.300',
-                            color: isSelected ? '#fff' : 'grey.700',
-                            fontWeight: 'bold',
-                          }}
-                        >
-                          {other.name?.[0]}
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography fontWeight={isSelected ? 700 : 500} color="#2c3e50">
-                            {other.name}
-                          </Typography>
-                        }
-                        secondary={
-                          <Typography variant="caption" color="text.secondary" fontWeight={500}>
-                            {other.role}
-                          </Typography>
-                        }
-                      />
-                    </ListItemButton>
-                  );
-                })
+                .length === 0 ? (
+              <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100%" p={3} textAlign="center" color="text.secondary">
+                <ChatBubbleOutlineIcon sx={{fontSize: 40, mb: 1, opacity: 0.5}} />
+                <Typography variant="body2">No conversations found.</Typography>
+              </Box>
+            ) : (
+              conversations
+                  .filter((conv) => {
+                    const other = getOtherParticipant(conv);
+                    return other.name?.toLowerCase().includes(searchQuery.toLowerCase());
+                  })
+                  .map((conv) => {
+                    const other = getOtherParticipant(conv);
+                    const isSelected = activeConversation?._id === conv._id;
+                    return (
+                      <ListItemButton
+                        key={conv._id}
+                        selected={isSelected}
+                        onClick={() => setActiveConversation(conv)}
+                        sx={{
+                          'py': 2,
+                          'px': 3,
+                          'borderLeft': isSelected ? 4 : 0,
+                          'borderColor': 'primary.main',
+                          // Explicit background for selection to ensure contrast
+                          'bgcolor': isSelected ? 'rgba(25, 118, 210, 0.08)' : 'transparent',
+                          'transition': 'all 0.2s',
+                          '&:hover': {bgcolor: 'rgba(0,0,0,0.04)'},
+                        }}
+                      >
+                        <ListItemAvatar>
+                          <Avatar
+                            alt={other.name}
+                            src="/static/images/avatar/1.jpg"
+                            sx={{
+                              bgcolor: isSelected ? 'primary.main' : 'grey.300',
+                              color: isSelected ? '#fff' : 'grey.700',
+                              fontWeight: 'bold',
+                            }}
+                          >
+                            {other.name?.[0]}
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={
+                            <Typography fontWeight={isSelected ? 700 : 500} color="#2c3e50">
+                              {other.name}
+                            </Typography>
+                          }
+                          secondary={
+                            <Typography variant="caption" color="text.secondary" fontWeight={500}>
+                              {other.role}
+                            </Typography>
+                          }
+                        />
+                      </ListItemButton>
+                    );
+                  })
             )}
           </List>
         </Box>
 
         {/* Chat Area */}
-        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', bgcolor: '#f8f9fa' }}>
+        <Box sx={{flexGrow: 1, display: 'flex', flexDirection: 'column', bgcolor: '#f8f9fa'}}>
           {activeConversation ? (
             <>
               {/* Chat Header */}
@@ -372,16 +372,17 @@ const ChatPage = () => {
                 display="flex"
                 alignItems="center"
                 justifyContent="space-between"
-                sx={{ boxShadow: '0 2px 4px rgba(0,0,0,0.02)', zIndex: 1 }}
+                sx={{boxShadow: '0 2px 4px rgba(0,0,0,0.02)', zIndex: 1}}
               >
                 <Box display="flex" alignItems="center" gap={2}>
-                  <Avatar sx={{ bgcolor: theme.palette.secondary.main }}>
+                  <Avatar sx={{bgcolor: theme.palette.secondary.main}}>
                     {getOtherParticipant(activeConversation).name?.[0]}
                   </Avatar>
                   <Box
+                    // eslint-disable-next-line max-len
                     onMouseEnter={(e) => handleProfileHover(e, getOtherParticipant(activeConversation)._id)}
                     onMouseLeave={handleProfileLeave}
-                    sx={{ cursor: user.role === USER_ROLES.DOCTOR ? 'pointer' : 'default' }}
+                    sx={{cursor: user.role === USER_ROLES.DOCTOR ? 'pointer' : 'default'}}
                   >
                     <Typography
                       variant="subtitle1"
@@ -394,7 +395,7 @@ const ChatPage = () => {
                       }}
                       sx={{
                         'color': '#000000',
-                        '&:hover': { textDecoration: user.role === USER_ROLES.DOCTOR ? 'underline' : 'none' },
+                        '&:hover': {textDecoration: user.role === USER_ROLES.DOCTOR ? 'underline' : 'none'},
                       }}
                     >
                       {getOtherParticipant(activeConversation).name}
@@ -415,7 +416,7 @@ const ChatPage = () => {
                   </Box>
                 </Box>
                 {!activeConversation.isActive && (
-                  <Alert severity="error" icon={false} sx={{ py: 0, px: 2 }}>
+                  <Alert severity="error" icon={false} sx={{py: 0, px: 2}}>
                     Treatment Completed
                   </Alert>
                 )}
@@ -433,93 +434,98 @@ const ChatPage = () => {
                 backgroundSize: '20px 20px',
               }}>
                 {messages
-                  .filter((msg) => !(user.role === USER_ROLES.PATIENT && msg.type === MESSAGE_TYPES.ALERT))
-                  .map((msg, index) => {
-                    const isMe = msg.sender === user._id;
-                    const isSystem = msg.type === MESSAGE_TYPES.SYSTEM;
+                    .filter(
+                        (msg) => !(
+                          user.role === USER_ROLES.PATIENT &&
+                      msg.type === MESSAGE_TYPES.ALERT
+                        ),
+                    )
+                    .map((msg, index) => {
+                      const isMe = msg.sender === user._id;
+                      const isSystem = msg.type === MESSAGE_TYPES.SYSTEM;
 
 
-                    const isAlert = msg.type === MESSAGE_TYPES.ALERT;
-                    const isMilestone = msg.type === MESSAGE_TYPES.MILESTONE;
+                      const isAlert = msg.type === MESSAGE_TYPES.ALERT;
+                      const isMilestone = msg.type === MESSAGE_TYPES.MILESTONE;
 
-                    if (isSystem || isAlert || isMilestone) {
-                      let bgcolor = 'rgba(0,0,0,0.05)';
-                      let color = 'text.secondary';
-                      let icon = null;
+                      if (isSystem || isAlert || isMilestone) {
+                        let bgcolor = 'rgba(0,0,0,0.05)';
+                        let color = 'text.secondary';
+                        let icon = null;
 
-                      if (isAlert) {
-                        bgcolor = '#fff4e5'; // Orange-ish
-                        color = '#e65100';
-                        icon = '⚠️ ';
-                      } else if (isMilestone) {
-                        bgcolor = '#e8f5e9'; // Green-ish
-                        color = '#2e7d32';
-                        icon = '🏆 ';
-                      }
+                        if (isAlert) {
+                          bgcolor = '#fff4e5'; // Orange-ish
+                          color = '#e65100';
+                          icon = '⚠️ ';
+                        } else if (isMilestone) {
+                          bgcolor = '#e8f5e9'; // Green-ish
+                          color = '#2e7d32';
+                          icon = '🏆 ';
+                        }
 
-                      return (
-                        <Box key={msg._id || index} display="flex" justifyContent="center" width="100%" my={1}>
-                          <Typography
-                            variant="caption"
-                            sx={{
-                              bgcolor,
-                              px: 2,
-                              py: 1,
-                              borderRadius: 4,
-                              color,
-                              border: isAlert || isMilestone ? 1 : 0,
-                              borderColor: isAlert ? '#ffcc80' : (isMilestone ? '#a5d6a7' : 'transparent'),
-                              fontWeight: isAlert || isMilestone ? 600 : 400,
-                            }}
-                          >
-                            {icon}{msg.content}
-                          </Typography>
-                        </Box>
-                      );
-                    }
-
-                    return (
-                      <Box
-                        key={msg._id || index}
-                        display="flex"
-                        justifyContent={isMe ? 'flex-end' : 'flex-start'}
-                      >
-                        <Paper
-                          elevation={isMe ? 4 : 1}
-                          sx={{
-                            p: 2,
-                            maxWidth: '70%',
-                            borderRadius: 3,
-                            borderBottomRightRadius: isMe ? 0 : 3,
-                            borderBottomLeftRadius: isMe ? 3 : 0,
-                            // Improved contrast: Darker text for incoming, White for outgoing
-                            bgcolor: isMe ? theme.palette.primary.main : '#ffffff',
-                            color: isMe ? '#ffffff' : '#1a1a1a',
-                            // Subtle border for incoming to stand out against white bg
-                            border: isMe ? 'none' : '1px solid #e0e0e0',
-                            background: isMe ? `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})` : '#ffffff',
-                          }}
-                        >
-                          <Typography variant="body1" sx={{ wordBreak: 'break-word', lineHeight: 1.5, fontWeight: 500 }}>
-                            {msg.content}
-                          </Typography>
-                          <Box display="flex" justifyContent="flex-end" mt={0.5}>
+                        return (
+                          <Box key={msg._id || index} display="flex" justifyContent="center" width="100%" my={1}>
                             <Typography
                               variant="caption"
                               sx={{
-                                fontSize: '0.65rem',
-                                opacity: 0.8,
-                                // Explicit colors for readability
-                                color: isMe ? 'rgba(255,255,255,0.9)' : '#757575',
+                                bgcolor,
+                                px: 2,
+                                py: 1,
+                                borderRadius: 4,
+                                color,
+                                border: isAlert || isMilestone ? 1 : 0,
+                                borderColor: isAlert ? '#ffcc80' : (isMilestone ? '#a5d6a7' : 'transparent'),
+                                fontWeight: isAlert || isMilestone ? 600 : 400,
                               }}
                             >
-                              {formatDate(msg.createdAt)}
+                              {icon}{msg.content}
                             </Typography>
                           </Box>
-                        </Paper>
-                      </Box>
-                    );
-                  })}
+                        );
+                      }
+
+                      return (
+                        <Box
+                          key={msg._id || index}
+                          display="flex"
+                          justifyContent={isMe ? 'flex-end' : 'flex-start'}
+                        >
+                          <Paper
+                            elevation={isMe ? 4 : 1}
+                            sx={{
+                              p: 2,
+                              maxWidth: '70%',
+                              borderRadius: 3,
+                              borderBottomRightRadius: isMe ? 0 : 3,
+                              borderBottomLeftRadius: isMe ? 3 : 0,
+                              // Improved contrast: Darker text for incoming, White for outgoing
+                              bgcolor: isMe ? theme.palette.primary.main : '#ffffff',
+                              color: isMe ? '#ffffff' : '#1a1a1a',
+                              // Subtle border for incoming to stand out against white bg
+                              border: isMe ? 'none' : '1px solid #e0e0e0',
+                              background: isMe ? `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})` : '#ffffff',
+                            }}
+                          >
+                            <Typography variant="body1" sx={{wordBreak: 'break-word', lineHeight: 1.5, fontWeight: 500}}>
+                              {msg.content}
+                            </Typography>
+                            <Box display="flex" justifyContent="flex-end" mt={0.5}>
+                              <Typography
+                                variant="caption"
+                                sx={{
+                                  fontSize: '0.65rem',
+                                  opacity: 0.8,
+                                  // Explicit colors for readability
+                                  color: isMe ? 'rgba(255,255,255,0.9)' : '#757575',
+                                }}
+                              >
+                                {formatDate(msg.createdAt)}
+                              </Typography>
+                            </Box>
+                          </Paper>
+                        </Box>
+                      );
+                    })}
                 <div ref={messagesEndRef} />
               </Box>
 
@@ -540,7 +546,7 @@ const ChatPage = () => {
                     'borderRadius': 3,
                     'border': 1,
                     'borderColor': 'transparent',
-                    '&:focus-within': { borderColor: 'primary.main', bgcolor: 'white' },
+                    '&:focus-within': {borderColor: 'primary.main', bgcolor: 'white'},
                     'transition': 'all 0.2s',
                   }}
                 >
@@ -550,7 +556,7 @@ const ChatPage = () => {
                     variant="standard"
                     InputProps={{
                       disableUnderline: true,
-                      sx: { px: 2, py: 1, color: '#000000' }, // Pure black for input
+                      sx: {px: 2, py: 1, color: '#000000'}, // Pure black for input
                     }}
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
@@ -565,8 +571,8 @@ const ChatPage = () => {
                       'm': 1,
                       'bgcolor': 'primary.main',
                       'color': 'white',
-                      '&:hover': { bgcolor: 'primary.dark' },
-                      '&.Mui-disabled': { bgcolor: 'action.disabledBackground' },
+                      '&:hover': {bgcolor: 'primary.dark'},
+                      '&.Mui-disabled': {bgcolor: 'action.disabledBackground'},
                     }}
                   >
                     <SendIcon fontSize="small" />
@@ -583,7 +589,7 @@ const ChatPage = () => {
                   alignItems: 'center', justifyContent: 'center', mb: 3,
                 }}
               >
-                <ChatBubbleOutlineIcon sx={{ fontSize: 60, opacity: 0.3 }} />
+                <ChatBubbleOutlineIcon sx={{fontSize: 60, opacity: 0.3}} />
               </Box>
               <Typography variant="h5" color="text.primary" gutterBottom>Select a Conversation</Typography>
               <Typography variant="body1">Choose a contact from the left to start chatting.</Typography>
@@ -598,12 +604,12 @@ const ChatPage = () => {
         onClose={() => setOpenNewChat(false)}
         fullWidth
         maxWidth="xs"
-        PaperProps={{ sx: { borderRadius: 3 } }}
+        PaperProps={{sx: {borderRadius: 3}}}
       >
-        <DialogTitle sx={{ borderBottom: 1, borderColor: 'divider', pb: 2 }}>
+        <DialogTitle sx={{borderBottom: 1, borderColor: 'divider', pb: 2}}>
           Start New Conversation
         </DialogTitle>
-        <MuiList sx={{ py: 0 }}>
+        <MuiList sx={{py: 0}}>
           {contacts.length === 0 ? (
             <Box p={4} textAlign="center" color="text.secondary">
               <Typography>No active treatment plans found.</Typography>
@@ -613,10 +619,10 @@ const ChatPage = () => {
               <ListItemButton
                 key={contact._id}
                 onClick={() => handleStartChat(contact._id)}
-                sx={{ py: 2 }}
+                sx={{py: 2}}
               >
                 <ListItemAvatar>
-                  <Avatar sx={{ bgcolor: 'primary.light', color: 'primary.contrastText' }}>{contact.name[0]}</Avatar>
+                  <Avatar sx={{bgcolor: 'primary.light', color: 'primary.contrastText'}}>{contact.name[0]}</Avatar>
                 </ListItemAvatar>
                 <ListItemText
                   primary={<Typography fontWeight="500">{contact.name}</Typography>}
@@ -630,22 +636,22 @@ const ChatPage = () => {
 
       {/* Patient Summary Popover */}
       <Popover
-        sx={{ pointerEvents: 'none' }}
+        sx={{pointerEvents: 'none'}}
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
+        transformOrigin={{vertical: 'top', horizontal: 'left'}}
         onClose={() => setAnchorEl(null)}
         disableRestoreFocus
       >
-        <Paper sx={{ p: 2.5, maxWidth: 350, bgcolor: 'background.paper', borderRadius: 3 }}>
+        <Paper sx={{p: 2.5, maxWidth: 350, bgcolor: 'background.paper', borderRadius: 3}}>
           {hoverLoading ? (
             <Box p={2} display="flex" justifyContent="center"><CircularProgress size={20} /></Box>
           ) : hoverData && hoverData.treatment ? (
             <Box>
               {/* Header */}
               <Box display="flex" alignItems="center" mb={2}>
-                <Avatar sx={{ width: 48, height: 48, bgcolor: 'primary.main', mr: 2 }}>
+                <Avatar sx={{width: 48, height: 48, bgcolor: 'primary.main', mr: 2}}>
                   {hoverData.patient.name?.[0]}
                 </Avatar>
                 <Box>
@@ -659,7 +665,7 @@ const ChatPage = () => {
                 </Box>
               </Box>
 
-              <Divider sx={{ mb: 2 }} />
+              <Divider sx={{mb: 2}} />
 
               {/* Active Treatment Section */}
               <Box mb={2}>
@@ -669,22 +675,24 @@ const ChatPage = () => {
                   </Typography>
                   <Chip
                     label={hoverData.treatment.status}
-                    size="small"
+
                     color={hoverData.treatment.status === TREATMENT_STATUS.ACTIVE ? 'success' : 'default'}
-                    sx={{ height: 20, fontSize: '0.65rem' }}
+                    sx={{height: 20, fontSize: '0.65rem'}}
                   />
                 </Box>
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   <strong>Diagnosis:</strong> {hoverData.treatment.diagnosis}
+                    // eslint-disable-next-line max-len
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  <strong>Started:</strong> {new Date(hoverData.treatment.startDate).toLocaleDateString()}
+                  <strong>Started:</strong>{' '}
+                  {new Date(hoverData.treatment.startDate).toLocaleDateString()}
                 </Typography>
               </Box>
 
               {/* Medications */}
               <Box>
-                <Typography variant="caption" fontWeight="bold" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
+                <Typography variant="caption" fontWeight="bold" color="text.secondary" sx={{display: 'block', mb: 1}}>
                   MEDICATIONS
                 </Typography>
                 <Box display="flex" flexWrap="wrap" gap={0.5}>
@@ -694,7 +702,7 @@ const ChatPage = () => {
                       label={med}
                       size="small"
                       variant="outlined"
-                      sx={{ borderRadius: 1 }}
+                      sx={{borderRadius: 1}}
                     />
                   ))}
                   {hoverData.treatment.medications.length > 3 && (
@@ -702,7 +710,7 @@ const ChatPage = () => {
                       label={`+${hoverData.treatment.medications.length - 3} more`}
                       size="small"
                       variant="outlined"
-                      sx={{ borderRadius: 1, bgcolor: 'action.hover' }}
+                      sx={{borderRadius: 1, bgcolor: 'action.hover'}}
                     />
                   )}
                 </Box>

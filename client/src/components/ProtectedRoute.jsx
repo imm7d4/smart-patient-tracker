@@ -1,11 +1,11 @@
-import { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import {useContext} from 'react';
+import {Navigate} from 'react-router-dom';
 import AuthContext from '@/context/AuthContext';
-import { CircularProgress, Box } from '@mui/material';
-import { USER_ROLES } from '@/constants';
+import {CircularProgress, Box} from '@mui/material';
+import {USER_ROLES} from '@/constants';
 
-const ProtectedRoute = ({ children, allowedRoles = [] }) => {
-  const { user, loading } = useContext(AuthContext);
+const ProtectedRoute = ({children, allowedRoles = []}) => {
+  const {user, loading} = useContext(AuthContext);
 
   if (loading) {
     return (
