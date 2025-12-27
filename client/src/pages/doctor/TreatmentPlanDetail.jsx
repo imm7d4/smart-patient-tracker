@@ -28,7 +28,7 @@ const TreatmentPlanDetail = () => {
 
         // Find the ACTIVE plan
         const plans = res.data.data;
-        const currentPlan = plans.find((p) => p.status === 'ACTIVE');
+        const currentPlan = plans.find((p) => p.status === TREATMENT_STATUS.ACTIVE);
 
         if (currentPlan) {
           setActivePlan(currentPlan);
@@ -92,7 +92,7 @@ const TreatmentPlanDetail = () => {
           </Box>
           <Chip
             label={activePlan.status}
-            color={activePlan.status === 'ACTIVE' ? 'success' : 'default'}
+            color={activePlan.status === TREATMENT_STATUS.ACTIVE ? 'success' : 'default'}
             sx={{fontSize: '1rem', px: 1, py: 0.5}}
           />
         </Box>

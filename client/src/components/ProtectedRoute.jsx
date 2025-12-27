@@ -1,10 +1,11 @@
-import {useContext} from 'react';
-import {Navigate} from 'react-router-dom';
+import { useContext } from 'react';
+import { Navigate } from 'react-router-dom';
 import AuthContext from '@/context/AuthContext';
-import {CircularProgress, Box} from '@mui/material';
+import { CircularProgress, Box } from '@mui/material';
+import { USER_ROLES } from '@/constants';
 
-const ProtectedRoute = ({children, allowedRoles = []}) => {
-  const {user, loading} = useContext(AuthContext);
+const ProtectedRoute = ({ children, allowedRoles = [] }) => {
+  const { user, loading } = useContext(AuthContext);
 
   if (loading) {
     return (
@@ -21,7 +22,7 @@ const ProtectedRoute = ({children, allowedRoles = []}) => {
   // Check if user's role is in the allowed roles list
   if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
     // Redirect unauthorized users to their appropriate dashboard
-    if (user.role === 'ADMIN') {
+    if (user.role === USER_ROLES.ADMIN) {
       return <Navigate to="/admin/dashboard" replace />;
     }
     return <Navigate to="/dashboard" replace />;

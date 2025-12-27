@@ -225,7 +225,7 @@ const ChatPage = () => {
 
   // Navigation Handler
   const handleHeaderClick = () => {
-    if (user.role === 'DOCTOR' && activeConversation) {
+    if (user.role === USER_ROLES.DOCTOR && activeConversation) {
       const patientId = getOtherParticipant(activeConversation)._id;
       navigate(`/doctor/treatment-plan/${patientId}`);
     }
@@ -381,20 +381,20 @@ const ChatPage = () => {
                   <Box
                     onMouseEnter={(e) => handleProfileHover(e, getOtherParticipant(activeConversation)._id)}
                     onMouseLeave={handleProfileLeave}
-                    sx={{ cursor: user.role === 'DOCTOR' ? 'pointer' : 'default' }}
+                    sx={{ cursor: user.role === USER_ROLES.DOCTOR ? 'pointer' : 'default' }}
                   >
                     <Typography
                       variant="subtitle1"
                       fontWeight="bold"
                       onClick={(e) => {
-                        if (user.role === 'DOCTOR') {
+                        if (user.role === USER_ROLES.DOCTOR) {
                           e.stopPropagation();
                           handleHeaderClick();
                         }
                       }}
                       sx={{
                         'color': '#000000',
-                        '&:hover': { textDecoration: user.role === 'DOCTOR' ? 'underline' : 'none' },
+                        '&:hover': { textDecoration: user.role === USER_ROLES.DOCTOR ? 'underline' : 'none' },
                       }}
                     >
                       {getOtherParticipant(activeConversation).name}
@@ -433,14 +433,14 @@ const ChatPage = () => {
                 backgroundSize: '20px 20px',
               }}>
                 {messages
-                  .filter((msg) => !(user.role === 'PATIENT' && msg.type === 'ALERT'))
+                  .filter((msg) => !(user.role === USER_ROLES.PATIENT && msg.type === MESSAGE_TYPES.ALERT))
                   .map((msg, index) => {
                     const isMe = msg.sender === user._id;
-                    const isSystem = msg.type === 'SYSTEM';
+                    const isSystem = msg.type === MESSAGE_TYPES.SYSTEM;
 
 
-                    const isAlert = msg.type === 'ALERT';
-                    const isMilestone = msg.type === 'MILESTONE';
+                    const isAlert = msg.type === MESSAGE_TYPES.ALERT;
+                    const isMilestone = msg.type === MESSAGE_TYPES.MILESTONE;
 
                     if (isSystem || isAlert || isMilestone) {
                       let bgcolor = 'rgba(0,0,0,0.05)';
@@ -670,7 +670,7 @@ const ChatPage = () => {
                   <Chip
                     label={hoverData.treatment.status}
                     size="small"
-                    color={hoverData.treatment.status === 'ACTIVE' ? 'success' : 'default'}
+                    color={hoverData.treatment.status === TREATMENT_STATUS.ACTIVE ? 'success' : 'default'}
                     sx={{ height: 20, fontSize: '0.65rem' }}
                   />
                 </Box>
