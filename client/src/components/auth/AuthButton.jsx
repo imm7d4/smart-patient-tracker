@@ -1,17 +1,19 @@
 import { Button, CircularProgress } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-const AuthButton = ({ children, loading = false, ...props }) => {
+const AuthButton = ({ children, loading = false, size, ...props }) => {
     const theme = useTheme();
 
     return (
         <Button
-            fullWidth
+            fullWidth={!size || size === 'large'}
             variant="contained"
+            size={size}
             disabled={loading}
             sx={{
-                py: 1.5,
-                fontSize: '1rem',
+                py: size === 'small' ? 1 : size === 'medium' ? 1.25 : 1.5,
+                px: size === 'small' ? 2 : size === 'medium' ? 3 : 4,
+                fontSize: size === 'small' ? '0.875rem' : size === 'medium' ? '0.9375rem' : '1rem',
                 fontWeight: 600,
                 textTransform: 'none',
                 background: theme.custom.auth.gradientPrimary,
