@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {Container, Typography, Paper, Grid} from '@mui/material';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
-import dashboardService from '../../services/dashboardService';
+import dashboardService from '@/services/dashboardService';
 
 const DoctorPatientDetail = () => {
   const {id} = useParams();

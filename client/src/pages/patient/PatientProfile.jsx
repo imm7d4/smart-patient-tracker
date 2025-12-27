@@ -7,10 +7,10 @@ import {
   Person, ContactEmergency, LocalHospital, FitnessCenter,
   Restaurant, VerifiedUser, Download,
 } from '@mui/icons-material';
-import profileService from '../../services/profileService';
-import ProgressStepper from '../../components/patient/ProgressStepper';
-import AuthCard from '../../components/auth/AuthCard';
-import AuthButton from '../../components/auth/AuthButton';
+import profileService from '@/services/profileService';
+import ProgressStepper from '@/components/patient/ProgressStepper';
+import AuthCard from '@/components/auth/AuthCard';
+import AuthButton from '@/components/auth/AuthButton';
 
 const steps = [
   { label: 'Basic Info', icon: <Person /> },

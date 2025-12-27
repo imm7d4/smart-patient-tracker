@@ -7,8 +7,8 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import AddIcon from '@mui/icons-material/Add';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import AuthContext from '../../context/AuthContext';
-import chatService from '../../services/chatService';
+import AuthContext from '@/context/AuthContext';
+import chatService from '@/services/chatService';
 
 const ChatPage = () => {
   const { user } = useContext(AuthContext);

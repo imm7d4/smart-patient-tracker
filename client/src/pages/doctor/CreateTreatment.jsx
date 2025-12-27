@@ -2,8 +2,8 @@ import {useState, useEffect} from 'react';
 import {Container, Typography, TextField, Button, Box, MenuItem, Grid, IconButton, Paper} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import treatmentService from '../../services/treatmentService';
-import userService from '../../services/userService';
+import treatmentService from '@/services/treatmentService';
+import userService from '@/services/userService';
 import {useNavigate} from 'react-router-dom';
 
 const CreateTreatment = () => {

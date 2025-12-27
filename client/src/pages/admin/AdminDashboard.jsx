@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {Container, Typography, Grid, Paper, Box, Button} from '@mui/material';
 import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell} from 'recharts';
-import adminService from '../../services/adminService';
+import adminService from '@/services/adminService';
 import {Link} from 'react-router-dom';
 
 const AdminDashboard = () => {

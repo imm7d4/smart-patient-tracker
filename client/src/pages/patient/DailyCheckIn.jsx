@@ -12,12 +12,12 @@ import {
   EmojiEvents,
   Close as CloseIcon,
 } from '@mui/icons-material';
-import checkInService from '../../services/checkInService';
-import AuthCard from '../../components/auth/AuthCard';
-import AuthButton from '../../components/auth/AuthButton';
-import AuthInput from '../../components/auth/AuthInput';
-import PainLevelSlider from '../../components/patient/PainLevelSlider';
-import PatientCard from '../../components/patient/PatientCard';
+import checkInService from '@/services/checkInService';
+import AuthCard from '@/components/auth/AuthCard';
+import AuthButton from '@/components/auth/AuthButton';
+import AuthInput from '@/components/auth/AuthInput';
+import PainLevelSlider from '@/components/patient/PainLevelSlider';
+import PatientCard from '@/components/patient/PatientCard';
 
 const DailyCheckIn = () => {
   const [formData, setFormData] = useState({

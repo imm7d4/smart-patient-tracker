@@ -1,10 +1,10 @@
 import { useContext, useState, useEffect } from 'react';
 import { Container, Typography, Box, Button } from '@mui/material';
 import { Link, Navigate } from 'react-router-dom';
-import axios from '../api/axios';
-import AuthContext from '../context/AuthContext';
+import axios from '@/api/axios';
+import AuthContext from '@/context/AuthContext';
 import DoctorDashboard from './doctor/DoctorDashboard';
-import ConsentModal from '../components/ConsentModal';
+import ConsentModal from '@/components/ConsentModal';
 
 const Dashboard = () => {
   const { user, loading } = useContext(AuthContext);

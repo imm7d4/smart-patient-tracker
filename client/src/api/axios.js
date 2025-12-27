@@ -1,6 +1,6 @@
 import axios from 'axios';
-import secureStorage from '../utils/secureStorage';
-import cryptoService from '../services/cryptoService';
+import secureStorage from '@/utils/secureStorage';
+import cryptoService from '@/services/cryptoService';
 
 const api = axios.create({
   baseURL: 'http://localhost:5000/api', // Adjust if deployed

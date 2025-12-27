@@ -10,11 +10,11 @@ import {
   AdminPanelSettings,
   Accessible,
 } from '@mui/icons-material';
-import AuthContext from '../context/AuthContext';
-import AuthLayout from '../components/auth/AuthLayout';
-import AuthCard from '../components/auth/AuthCard';
-import AuthInput from '../components/auth/AuthInput';
-import AuthButton from '../components/auth/AuthButton';
+import AuthContext from '@/context/AuthContext';
+import AuthLayout from '@/components/auth/AuthLayout';
+import AuthCard from '@/components/auth/AuthCard';
+import AuthInput from '@/components/auth/AuthInput';
+import AuthButton from '@/components/auth/AuthButton';
 
 const Register = () => {
   const [formData, setFormData] = useState({

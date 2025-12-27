@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
-import AuthContext from '../../context/AuthContext';
-import chatService from '../../services/chatService';
+import AuthContext from '@/context/AuthContext';
+import chatService from '@/services/chatService';
 
 // Wait, I saw Alert in ChatPage, but not Snackbar context globally.
 // I'll implement a simple Snackbar here with MUI or use a global one if it existed.

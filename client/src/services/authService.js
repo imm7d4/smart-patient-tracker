@@ -1,6 +1,6 @@
-import api from '../api/axios';
+import api from '@/api/axios';
 
-import secureStorage from '../utils/secureStorage';
+import secureStorage from '@/utils/secureStorage';
 
 const register = async (userData) => {
   const response = await api.post('/auth/register', userData);

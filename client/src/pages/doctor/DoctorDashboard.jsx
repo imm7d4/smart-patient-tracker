@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, Button, Box, Tooltip} from '@mui/material';
 import {Link} from 'react-router-dom';
-import dashboardService from '../../services/dashboardService';
+import dashboardService from '@/services/dashboardService';
 
 const DoctorDashboard = () => {
   const [statuses, setStatuses] = useState([]);

@@ -2,11 +2,11 @@ import {useState, useContext} from 'react';
 import {useNavigate, Link} from 'react-router-dom';
 import {Typography, Box, Alert, Fade, InputAdornment} from '@mui/material';
 import {Email, Lock, Login as LoginIcon} from '@mui/icons-material';
-import AuthContext from '../context/AuthContext';
-import AuthLayout from '../components/auth/AuthLayout';
-import AuthCard from '../components/auth/AuthCard';
-import AuthInput from '../components/auth/AuthInput';
-import AuthButton from '../components/auth/AuthButton';
+import AuthContext from '@/context/AuthContext';
+import AuthLayout from '@/components/auth/AuthLayout';
+import AuthCard from '@/components/auth/AuthCard';
+import AuthInput from '@/components/auth/AuthInput';
+import AuthButton from '@/components/auth/AuthButton';
 
 const Login = () => {
   const [email, setEmail] = useState('');

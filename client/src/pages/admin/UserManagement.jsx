@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import {Container, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Button, Tooltip, Switch} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
-import adminService from '../../services/adminService';
+import adminService from '@/services/adminService';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);

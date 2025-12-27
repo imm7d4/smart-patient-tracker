@@ -1,4 +1,4 @@
-import api from '../api/axios';
+import api from '@/api/axios';
 
 const chatService = {
   // Initialize or get existing conversation

@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import {Container, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, TextField, MenuItem, Select, FormControl, InputLabel, Grid, TablePagination} from '@mui/material';
-import adminService from '../../services/adminService';
+import adminService from '@/services/adminService';
 
 const AuditLogsPage = () => {
   const [logs, setLogs] = useState([]);

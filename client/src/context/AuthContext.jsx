@@ -1,6 +1,6 @@
 import {createContext, useState, useEffect} from 'react';
-import authService from '../services/authService';
-import secureStorage from '../utils/secureStorage';
+import authService from '@/services/authService';
+import secureStorage from '@/utils/secureStorage';
 
 const AuthContext = createContext();
 

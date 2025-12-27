@@ -1,4 +1,4 @@
-import api from '../api/axios';
+import api from '@/api/axios';
 
 const getStats = () => api.get('/admin/stats');
 const getAllUsers = () => api.get('/admin/users');

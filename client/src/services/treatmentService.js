@@ -1,4 +1,4 @@
-import api from '../api/axios';
+import api from '@/api/axios';
 
 const createTreatment = (data) => api.post('/treatments', data);
 const getTreatments = (params) => api.get('/treatments', {params});

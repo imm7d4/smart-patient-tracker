@@ -11,7 +11,7 @@ import {
   CheckCircle as CheckIcon,
   ArrowBack as BackIcon,
 } from '@mui/icons-material';
-import treatmentService from '../../services/treatmentService';
+import treatmentService from '@/services/treatmentService';
 
 const TreatmentPlanDetail = () => {
   const {patientId} = useParams();

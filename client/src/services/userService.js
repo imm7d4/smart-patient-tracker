@@ -1,4 +1,4 @@
-import api from '../api/axios';
+import api from '@/api/axios';
 
 const getPatients = () => api.get('/users/patients');
 

@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import {Container, Typography, List, ListItem, ListItemText, IconButton, Paper, Chip, Box, Button, Grid} from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import WarningIcon from '@mui/icons-material/Warning';
-import alertService from '../../services/alertService';
+import alertService from '@/services/alertService';
 import {Link} from 'react-router-dom';
 
 const AlertsPage = () => {

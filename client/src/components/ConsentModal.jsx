@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, FormControlLabel, Checkbox, Typography} from '@mui/material';
-import axios from '../api/axios';
+import axios from '@/api/axios';
 
 const ConsentModal = ({open, treatmentPlanId, onConsentGiven}) => {
   const [monitoring, setMonitoring] = useState(false);
