@@ -4,8 +4,8 @@
  * @returns {boolean} True if valid email format
  */
 const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 };
 
 /**
@@ -15,11 +15,11 @@ const validateEmail = (email) => {
  * @returns {Object} { valid: boolean, missing: Array<string> }
  */
 const validateRequired = (fields, data) => {
-    const missing = fields.filter(field => !data[field]);
-    return {
-        valid: missing.length === 0,
-        missing
-    };
+  const missing = fields.filter((field) => !data[field]);
+  return {
+    valid: missing.length === 0,
+    missing,
+  };
 };
 
 /**
@@ -28,8 +28,8 @@ const validateRequired = (fields, data) => {
  * @returns {string} Sanitized input
  */
 const sanitizeInput = (input) => {
-    if (typeof input !== 'string') return input;
-    return input.trim();
+  if (typeof input !== 'string') return input;
+  return input.trim();
 };
 
 /**
@@ -38,13 +38,13 @@ const sanitizeInput = (input) => {
  * @returns {boolean} True if valid ObjectId format
  */
 const validateObjectId = (id) => {
-    const objectIdRegex = /^[0-9a-fA-F]{24}$/;
-    return objectIdRegex.test(id);
+  const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+  return objectIdRegex.test(id);
 };
 
 module.exports = {
-    validateEmail,
-    validateRequired,
-    sanitizeInput,
-    validateObjectId
+  validateEmail,
+  validateRequired,
+  sanitizeInput,
+  validateObjectId,
 };

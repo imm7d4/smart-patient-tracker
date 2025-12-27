@@ -9,12 +9,12 @@ const PatientProfileRepository = require('./PatientProfileRepository');
 const AuditLogRepository = require('./AuditLogRepository');
 
 module.exports = {
-    UserRepository,
-    TreatmentPlanRepository,
-    DailyCheckInRepository,
-    AlertRepository,
-    ConversationRepository,
-    MessageRepository,
-    PatientProfileRepository,
-    AuditLogRepository
+  UserRepository,
+  TreatmentPlanRepository,
+  DailyCheckInRepository,
+  AlertRepository,
+  ConversationRepository,
+  MessageRepository,
+  PatientProfileRepository,
+  AuditLogRepository,
 };

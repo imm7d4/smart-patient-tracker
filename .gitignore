@@ -132,3 +132,7 @@ public/
 
 # Webpack
 .webpack/
+
+# Context files (for AI assistant use only)
+GOOGLE_CODING_STANDARDS.md
+

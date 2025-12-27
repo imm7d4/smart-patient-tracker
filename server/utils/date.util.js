@@ -4,9 +4,9 @@
  * @returns {Date} Start of day
  */
 const getStartOfDay = (date = new Date()) => {
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-    return startOfDay;
+  const startOfDay = new Date(date);
+  startOfDay.setHours(0, 0, 0, 0);
+  return startOfDay;
 };
 
 /**
@@ -15,9 +15,9 @@ const getStartOfDay = (date = new Date()) => {
  * @returns {Date} End of day
  */
 const getEndOfDay = (date = new Date()) => {
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
-    return endOfDay;
+  const endOfDay = new Date(date);
+  endOfDay.setHours(23, 59, 59, 999);
+  return endOfDay;
 };
 
 /**
@@ -26,9 +26,9 @@ const getEndOfDay = (date = new Date()) => {
  * @returns {Date} Date N days ago
  */
 const getDaysAgo = (days) => {
-    const date = new Date();
-    date.setDate(date.getDate() - days);
-    return date;
+  const date = new Date();
+  date.setDate(date.getDate() - days);
+  return date;
 };
 
 /**
@@ -36,15 +36,15 @@ const getDaysAgo = (days) => {
  * @returns {Object} Object with startOfDay and endOfDay
  */
 const getTodayRange = () => {
-    return {
-        startOfDay: getStartOfDay(),
-        endOfDay: getEndOfDay()
-    };
+  return {
+    startOfDay: getStartOfDay(),
+    endOfDay: getEndOfDay(),
+  };
 };
 
 module.exports = {
-    getStartOfDay,
-    getEndOfDay,
-    getDaysAgo,
-    getTodayRange
+  getStartOfDay,
+  getEndOfDay,
+  getDaysAgo,
+  getTodayRange,
 };
