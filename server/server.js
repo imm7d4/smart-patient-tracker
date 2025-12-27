@@ -22,7 +22,7 @@ app.use(require('./middleware/auditMiddleware'));
 // Database Connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/smart-patient-tracker')
     .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.error('MongoDB Connection Error:', err));
+    .catch((err) => console.error('MongoDB Connection Error:', err));
 
 // Initialize Cron Service
 require('./services/cron.service').initCron();
@@ -40,11 +40,11 @@ app.use('/api/test', require('./routes/test'));
 
 
 app.get('/', (req, res) => {
-    res.json({ message: 'Smart Patient Tracker API is running' });
+  res.json({message: 'Smart Patient Tracker API is running'});
 });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`Encryption Disabled: ${process.env.DISABLE_ENCRYPTION}`);
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Encryption Disabled: ${process.env.DISABLE_ENCRYPTION}`);
 });

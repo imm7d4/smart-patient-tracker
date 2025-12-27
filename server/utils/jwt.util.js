@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
  * @returns {string} JWT token
  */
 const generateToken = (id, role) => {
-    return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: '30d' });
+  return jwt.sign({id, role}, process.env.JWT_SECRET, {expiresIn: '30d'});
 };
 
 /**
@@ -17,10 +17,10 @@ const generateToken = (id, role) => {
  * @throws {Error} If token is invalid
  */
 const verifyToken = (token) => {
-    return jwt.verify(token, process.env.JWT_SECRET);
+  return jwt.verify(token, process.env.JWT_SECRET);
 };
 
 module.exports = {
-    generateToken,
-    verifyToken
+  generateToken,
+  verifyToken,
 };

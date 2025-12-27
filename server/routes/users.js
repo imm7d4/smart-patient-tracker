@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
-const { authorize } = require('../middleware/authorizeRole');
+const {protect} = require('../middleware/auth');
+const {authorize} = require('../middleware/authorizeRole');
 const UserController = require('../controllers/UserController');
 
 // @route   GET /api/users/patients

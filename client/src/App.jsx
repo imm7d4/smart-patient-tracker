@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+import {AuthProvider} from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -15,7 +15,7 @@ import PatientProfile from './pages/patient/PatientProfile';
 import ChatPage from './pages/common/ChatPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
-import { ThemeProvider, CssBaseline } from '@mui/material';
+import {ThemeProvider, CssBaseline} from '@mui/material';
 import theme from './theme';
 
 import Navbar from './components/Navbar';

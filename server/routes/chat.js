@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
-const { chatGuard } = require('../middleware/chatMiddleware');
+const {protect} = require('../middleware/auth');
+const {chatGuard} = require('../middleware/chatMiddleware');
 const ChatController = require('../controllers/ChatController');
 
 // Apply protection globally to chat routes
