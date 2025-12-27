@@ -44,6 +44,11 @@ module.exports = [
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',
       }],
+
+      // Allow Express Router pattern (const router = express.Router())
+      'new-cap': ['error', {
+        capIsNewExceptions: ['Router'],
+      }],
     },
   },
 ];

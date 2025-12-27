@@ -22,20 +22,20 @@ const auditLogger = async (req, res, next) => {
           // Let's rely on req.user if available later.
         }
       }
-    } catch (e) {
+    } catch (_e) {
       // Ignore
     }
   }
 
   // Capture original end function to intercept
-  const originalEnd = res.end;
+  const _originalEnd = res.end;
 
   // We can just log immediately or on finish. "EACH AND EVERY ACTION" implies request receipt usually.
   // But logging on finish allows capturing status code.
 
   res.on('finish', () => {
     // Filter out sensitive data from logging
-    const body = {...req.body};
+    const body = { ...req.body };
     if (body.password) body.password = '[REDACTED]';
 
     // Don't log internal health checks or static if any

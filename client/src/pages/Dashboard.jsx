@@ -1,13 +1,13 @@
-import {useContext, useState, useEffect} from 'react';
-import {Container, Typography, Box, Button} from '@mui/material';
-import {Link, Navigate} from 'react-router-dom';
+import { useContext, useState, useEffect } from 'react';
+import { Container, Typography, Box, Button } from '@mui/material';
+import { Link, Navigate } from 'react-router-dom';
 import axios from '../api/axios';
 import AuthContext from '../context/AuthContext';
 import DoctorDashboard from './doctor/DoctorDashboard';
 import ConsentModal from '../components/ConsentModal';
 
 const Dashboard = () => {
-  const {user, loading, logout} = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
 
   const [showConsent, setShowConsent] = useState(false);
   const [pendingPlanId, setPendingPlanId] = useState(null);
@@ -40,13 +40,13 @@ const Dashboard = () => {
 
   return (
     <Container>
-      <Box sx={{mt: 4}}>
+      <Box sx={{ mt: 4 }}>
         {user.role === 'DOCTOR' && <DoctorDashboard />}
 
         {user.role === 'PATIENT' && (
-          <Box sx={{mt: 4}}>
+          <Box sx={{ mt: 4 }}>
             <Button component={Link} to="/patient/checkin" variant="contained" size="large">Daily Check-In</Button>
-            <Typography variant="h6" sx={{mt: 3}}>My Recovery Status (Coming Soon)</Typography>
+            <Typography variant="h6" sx={{ mt: 3 }}>My Recovery Status (Coming Soon)</Typography>
 
             {pendingPlanId && (
               <ConsentModal
@@ -59,7 +59,7 @@ const Dashboard = () => {
         )}
       </Box>
       {user.role === 'ADMIN' && (
-        <Box sx={{mt: 4}}>
+        <Box sx={{ mt: 4 }}>
           <Typography variant="h6">Admin Panel (Coming Soon)</Typography>
         </Box>
       )}
