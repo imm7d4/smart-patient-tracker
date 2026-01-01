@@ -1,0 +1,6 @@
+export const MESSAGE_TYPES = {
+  NORMAL: 'NORMAL',
+  SYSTEM: 'SYSTEM',
+  ALERT: 'ALERT',
+  MILESTONE: 'MILESTONE',
+};

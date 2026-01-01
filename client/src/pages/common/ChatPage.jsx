@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext, useCallback } from 'react';
 import {
   Box, Grid, Paper, Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar,
   Divider, TextField, IconButton, Badge, CircularProgress, Alert, Fab, Dialog, DialogTitle,
@@ -9,6 +9,9 @@ import AddIcon from '@mui/icons-material/Add';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import AuthContext from '@/context/AuthContext';
 import chatService from '@/services/chatService';
+import { USER_ROLES } from '@/constants/userRoles';
+import { MESSAGE_TYPES } from '@/constants/messageTypes';
+import { TREATMENT_STATUS } from '@/constants/treatmentStatus';
 
 const ChatPage = () => {
   const { user } = useContext(AuthContext);
@@ -57,28 +60,24 @@ const ChatPage = () => {
     scrollToBottom();
   }, [messages]);
 
-  useEffect(() => {
-    if (activeConversation) {
-      setMessages([]);
-      lastSyncRef.current = null;
-      fetchMessages(activeConversation._id);
-      startPolling(activeConversation._id);
-    } else {
-      stopPolling();
+  const stopPolling = () => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
     }
-  }, [activeConversation]);
+  };
 
   const fetchConversations = async () => {
     try {
       const res = await chatService.getConversations();
       setConversations(res.data.data);
       setLoading(false);
-    } catch (_err) {
+    } catch {
       setLoading(false);
     }
   };
 
-  const fetchMessages = async (conversationId) => {
+  const fetchMessages = useCallback(async (conversationId) => {
     try {
       const since = lastSyncRef.current;
       const res = await chatService.getMessages(conversationId, since);
@@ -98,23 +97,27 @@ const ChatPage = () => {
     } catch (error) {
       console.error('Polling error', error);
     }
-  };
+  }, []);
 
-  const startPolling = (conversationId) => {
+  const startPolling = useCallback((conversationId) => {
     stopPolling();
     pollingIntervalRef.current = setInterval(() => {
       if (isTabActiveRef.current && conversationId) {
         fetchMessages(conversationId);
       }
     }, 3000);
-  };
+  }, [fetchMessages]);
 
-  const stopPolling = () => {
-    if (pollingIntervalRef.current) {
-      clearInterval(pollingIntervalRef.current);
-      pollingIntervalRef.current = null;
+  useEffect(() => {
+    if (activeConversation) {
+      setMessages([]);
+      lastSyncRef.current = null;
+      fetchMessages(activeConversation._id);
+      startPolling(activeConversation._id);
+    } else {
+      stopPolling();
     }
-  };
+  }, [activeConversation, fetchMessages, startPolling]);
 
   const handleSend = async () => {
     if (!newMessage.trim() || !activeConversation) return;
@@ -225,46 +228,63 @@ const ChatPage = () => {
 
   // Navigation Handler
   const handleHeaderClick = () => {
-    if (user.role === 'DOCTOR' && activeConversation) {
+    if (user.role === USER_ROLES.DOCTOR && activeConversation) {
       const patientId = getOtherParticipant(activeConversation)._id;
       navigate(`/doctor/treatment-plan/${patientId}`);
     }
   };
 
   return (
-    <Box sx={{ flexGrow: 1, height: 'calc(100vh - 100px)', p: 3, overflow: 'hidden', bgcolor: '#f0f2f5' }}>
+    <Box sx={{
+      flexGrow: 1,
+      height: 'calc(100vh - 100px)',
+      p: 3,
+      overflow: 'hidden',
+      background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+    }}>
       <Paper
-        elevation={6}
+        elevation={0}
         sx={{
           height: '100%',
           display: 'flex',
           borderRadius: 4,
           overflow: 'hidden',
-          bgcolor: 'white',
+          background: 'rgba(30, 41, 59, 0.6)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(148, 163, 184, 0.1)',
         }}
       >
         {/* Sidebar */}
         <Box sx={{
           width: 350,
-          borderRight: 1,
-          borderColor: 'divider',
+          borderRight: '1px solid rgba(148, 163, 184, 0.1)',
           display: 'flex',
           flexDirection: 'column',
-          bgcolor: '#fff',
+          background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)',
         }}>
           <Box
             p={3}
-            borderBottom={1}
-            borderColor="divider"
-            sx={{ bgcolor: theme.palette.primary.main, color: 'white' }}
+            sx={{
+              borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
+              background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%)',
+              backdropFilter: 'blur(10px)',
+            }}
           >
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-              <Typography variant="h6" fontWeight="bold">Messages</Typography>
+              <Typography variant="h6" fontWeight={700} color="white">Messages</Typography>
               <Tooltip title="Start New Chat">
                 <IconButton
                   size="small"
                   onClick={() => setOpenNewChat(true)}
-                  sx={{ 'bgcolor': 'rgba(255,255,255,0.2)', 'color': 'white', '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }}
+                  sx={{
+                    'bgcolor': 'rgba(59, 130, 246, 0.2)',
+                    'color': '#60a5fa',
+                    'border': '1px solid rgba(59, 130, 246, 0.3)',
+                    '&:hover': {
+                      bgcolor: 'rgba(59, 130, 246, 0.3)',
+                      borderColor: 'rgba(59, 130, 246, 0.5)',
+                    },
+                  }}
                 >
                   <AddIcon />
                 </IconButton>
@@ -277,14 +297,15 @@ const ChatPage = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               sx={{
-                'bgcolor': 'rgba(255,255,255,0.15)',
-                'borderRadius': 1,
+                'bgcolor': 'rgba(15, 23, 42, 0.5)',
+                'borderRadius': 2,
+                'border': '1px solid rgba(148, 163, 184, 0.1)',
                 '& .MuiOutlinedInput-root': {
                   'color': 'white',
                   '& fieldset': { border: 'none' },
                 },
                 '& .MuiInputBase-input::placeholder': {
-                  color: 'rgba(255,255,255,0.7)',
+                  color: 'rgba(148, 163, 184, 0.6)',
                   opacity: 1,
                 },
               }}
@@ -318,12 +339,14 @@ const ChatPage = () => {
                       sx={{
                         'py': 2,
                         'px': 3,
-                        'borderLeft': isSelected ? 4 : 0,
-                        'borderColor': 'primary.main',
-                        // Explicit background for selection to ensure contrast
-                        'bgcolor': isSelected ? 'rgba(25, 118, 210, 0.08)' : 'transparent',
+                        'borderLeft': isSelected ? 3 : 0,
+                        'borderColor': '#60a5fa',
+                        'bgcolor': isSelected ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
                         'transition': 'all 0.2s',
-                        '&:hover': { bgcolor: 'rgba(0,0,0,0.04)' },
+                        'borderRadius': isSelected ? '0 8px 8px 0' : 0,
+                        '&:hover': {
+                          bgcolor: isSelected ? 'rgba(59, 130, 246, 0.2)' : 'rgba(148, 163, 184, 0.05)',
+                        },
                       }}
                     >
                       <ListItemAvatar>
@@ -331,9 +354,10 @@ const ChatPage = () => {
                           alt={other.name}
                           src="/static/images/avatar/1.jpg"
                           sx={{
-                            bgcolor: isSelected ? 'primary.main' : 'grey.300',
-                            color: isSelected ? '#fff' : 'grey.700',
+                            bgcolor: isSelected ? '#3b82f6' : 'rgba(148, 163, 184, 0.2)',
+                            color: '#fff',
                             fontWeight: 'bold',
+                            border: isSelected ? '2px solid rgba(59, 130, 246, 0.3)' : 'none',
                           }}
                         >
                           {other.name?.[0]}
@@ -341,12 +365,12 @@ const ChatPage = () => {
                       </ListItemAvatar>
                       <ListItemText
                         primary={
-                          <Typography fontWeight={isSelected ? 700 : 500} color="#2c3e50">
+                          <Typography fontWeight={isSelected ? 700 : 500} color="white">
                             {other.name}
                           </Typography>
                         }
                         secondary={
-                          <Typography variant="caption" color="text.secondary" fontWeight={500}>
+                          <Typography variant="caption" sx={{ color: 'rgba(148, 163, 184, 0.8)' }} fontWeight={500}>
                             {other.role}
                           </Typography>
                         }
@@ -359,42 +383,45 @@ const ChatPage = () => {
         </Box>
 
         {/* Chat Area */}
-        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', bgcolor: '#f8f9fa' }}>
+        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(30, 41, 59, 0.4) 100%)' }}>
           {activeConversation ? (
             <>
               {/* Chat Header */}
               <Box
                 p={2}
                 px={3}
-                borderBottom={1}
-                borderColor="divider"
-                bgcolor="white"
                 display="flex"
                 alignItems="center"
                 justifyContent="space-between"
-                sx={{ boxShadow: '0 2px 4px rgba(0,0,0,0.02)', zIndex: 1 }}
+                sx={{
+                  background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%)',
+                  backdropFilter: 'blur(10px)',
+                  borderBottom: '1px solid rgba(148, 163, 184, 0.1)',
+                  zIndex: 1,
+                }}
               >
                 <Box display="flex" alignItems="center" gap={2}>
-                  <Avatar sx={{ bgcolor: theme.palette.secondary.main }}>
+                  <Avatar sx={{ bgcolor: '#3b82f6', border: '2px solid rgba(59, 130, 246, 0.3)' }}>
                     {getOtherParticipant(activeConversation).name?.[0]}
                   </Avatar>
                   <Box
+                    // eslint-disable-next-line max-len
                     onMouseEnter={(e) => handleProfileHover(e, getOtherParticipant(activeConversation)._id)}
                     onMouseLeave={handleProfileLeave}
-                    sx={{ cursor: user.role === 'DOCTOR' ? 'pointer' : 'default' }}
+                    sx={{ cursor: user.role === USER_ROLES.DOCTOR ? 'pointer' : 'default' }}
                   >
                     <Typography
                       variant="subtitle1"
                       fontWeight="bold"
                       onClick={(e) => {
-                        if (user.role === 'DOCTOR') {
+                        if (user.role === USER_ROLES.DOCTOR) {
                           e.stopPropagation();
                           handleHeaderClick();
                         }
                       }}
                       sx={{
-                        'color': '#000000',
-                        '&:hover': { textDecoration: user.role === 'DOCTOR' ? 'underline' : 'none' },
+                        'color': 'white',
+                        '&:hover': { textDecoration: user.role === USER_ROLES.DOCTOR ? 'underline' : 'none' },
                       }}
                     >
                       {getOtherParticipant(activeConversation).name}
@@ -408,7 +435,7 @@ const ChatPage = () => {
                           bgcolor: activeConversation.isActive ? 'success.main' : 'error.main',
                         }}
                       />
-                      <Typography variant="caption" color="text.secondary">
+                      <Typography variant="caption" sx={{ color: 'rgba(148, 163, 184, 0.8)' }}>
                         {activeConversation.isActive ? 'Active Session' : 'Session Closed'}
                       </Typography>
                     </Box>
@@ -429,18 +456,23 @@ const ChatPage = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2,
-                backgroundImage: 'radial-gradient(#e2e8f0 1px, transparent 1px)',
+                backgroundImage: 'radial-gradient(rgba(148, 163, 184, 0.1) 1px, transparent 1px)',
                 backgroundSize: '20px 20px',
               }}>
                 {messages
-                  .filter((msg) => !(user.role === 'PATIENT' && msg.type === 'ALERT'))
+                  .filter(
+                    (msg) => !(
+                      user.role === USER_ROLES.PATIENT &&
+                      msg.type === MESSAGE_TYPES.ALERT
+                    ),
+                  )
                   .map((msg, index) => {
                     const isMe = msg.sender === user._id;
-                    const isSystem = msg.type === 'SYSTEM';
+                    const isSystem = msg.type === MESSAGE_TYPES.SYSTEM;
 
 
-                    const isAlert = msg.type === 'ALERT';
-                    const isMilestone = msg.type === 'MILESTONE';
+                    const isAlert = msg.type === MESSAGE_TYPES.ALERT;
+                    const isMilestone = msg.type === MESSAGE_TYPES.MILESTONE;
 
                     if (isSystem || isAlert || isMilestone) {
                       let bgcolor = 'rgba(0,0,0,0.05)';
@@ -485,19 +517,18 @@ const ChatPage = () => {
                         justifyContent={isMe ? 'flex-end' : 'flex-start'}
                       >
                         <Paper
-                          elevation={isMe ? 4 : 1}
+                          elevation={0}
                           sx={{
                             p: 2,
                             maxWidth: '70%',
                             borderRadius: 3,
                             borderBottomRightRadius: isMe ? 0 : 3,
                             borderBottomLeftRadius: isMe ? 3 : 0,
-                            // Improved contrast: Darker text for incoming, White for outgoing
-                            bgcolor: isMe ? theme.palette.primary.main : '#ffffff',
-                            color: isMe ? '#ffffff' : '#1a1a1a',
-                            // Subtle border for incoming to stand out against white bg
-                            border: isMe ? 'none' : '1px solid #e0e0e0',
-                            background: isMe ? `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})` : '#ffffff',
+                            bgcolor: isMe ? 'transparent' : 'rgba(30, 41, 59, 0.6)',
+                            color: '#ffffff',
+                            border: isMe ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid rgba(148, 163, 184, 0.2)',
+                            background: isMe ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(37, 99, 235, 0.4) 100%)' : 'rgba(30, 41, 59, 0.6)',
+                            backdropFilter: 'blur(10px)',
                           }}
                         >
                           <Typography variant="body1" sx={{ wordBreak: 'break-word', lineHeight: 1.5, fontWeight: 500 }}>
@@ -526,9 +557,11 @@ const ChatPage = () => {
               {/* Input Area */}
               <Box
                 p={3}
-                bgcolor="white"
-                borderTop={1}
-                borderColor="divider"
+                sx={{
+                  background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%)',
+                  backdropFilter: 'blur(10px)',
+                  borderTop: '1px solid rgba(148, 163, 184, 0.1)',
+                }}
               >
                 <Paper
                   elevation={0}
@@ -536,11 +569,14 @@ const ChatPage = () => {
                     'display': 'flex',
                     'alignItems': 'center',
                     'p': '2px 4px',
-                    'bgcolor': 'grey.100',
+                    'bgcolor': 'rgba(15, 23, 42, 0.6)',
                     'borderRadius': 3,
-                    'border': 1,
-                    'borderColor': 'transparent',
-                    '&:focus-within': { borderColor: 'primary.main', bgcolor: 'white' },
+                    'border': '1px solid rgba(148, 163, 184, 0.2)',
+                    'backdropFilter': 'blur(10px)',
+                    '&:focus-within': {
+                      borderColor: 'rgba(59, 130, 246, 0.5)',
+                      bgcolor: 'rgba(15, 23, 42, 0.8)',
+                    },
                     'transition': 'all 0.2s',
                   }}
                 >
@@ -550,7 +586,7 @@ const ChatPage = () => {
                     variant="standard"
                     InputProps={{
                       disableUnderline: true,
-                      sx: { px: 2, py: 1, color: '#000000' }, // Pure black for input
+                      sx: { px: 2, py: 1, color: 'white' },
                     }}
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
@@ -558,15 +594,21 @@ const ChatPage = () => {
                     disabled={!activeConversation.isActive}
                   />
                   <IconButton
-                    color="primary"
                     onClick={handleSend}
                     disabled={!activeConversation.isActive || !newMessage.trim()}
                     sx={{
                       'm': 1,
-                      'bgcolor': 'primary.main',
+                      'bgcolor': '#3b82f6',
                       'color': 'white',
-                      '&:hover': { bgcolor: 'primary.dark' },
-                      '&.Mui-disabled': { bgcolor: 'action.disabledBackground' },
+                      'border': '1px solid rgba(59, 130, 246, 0.3)',
+                      '&:hover': {
+                        bgcolor: '#2563eb',
+                        borderColor: 'rgba(59, 130, 246, 0.5)',
+                      },
+                      '&.Mui-disabled': {
+                        bgcolor: 'rgba(148, 163, 184, 0.2)',
+                        borderColor: 'rgba(148, 163, 184, 0.1)',
+                      },
                     }}
                   >
                     <SendIcon fontSize="small" />
@@ -598,9 +640,16 @@ const ChatPage = () => {
         onClose={() => setOpenNewChat(false)}
         fullWidth
         maxWidth="xs"
-        PaperProps={{ sx: { borderRadius: 3 } }}
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(148, 163, 184, 0.1)',
+          },
+        }}
       >
-        <DialogTitle sx={{ borderBottom: 1, borderColor: 'divider', pb: 2 }}>
+        <DialogTitle sx={{ borderBottom: '1px solid rgba(148, 163, 184, 0.1)', pb: 2, color: 'white' }}>
           Start New Conversation
         </DialogTitle>
         <MuiList sx={{ py: 0 }}>
@@ -616,11 +665,11 @@ const ChatPage = () => {
                 sx={{ py: 2 }}
               >
                 <ListItemAvatar>
-                  <Avatar sx={{ bgcolor: 'primary.light', color: 'primary.contrastText' }}>{contact.name[0]}</Avatar>
+                  <Avatar sx={{ bgcolor: '#3b82f6', border: '2px solid rgba(59, 130, 246, 0.3)' }}>{contact.name[0]}</Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={<Typography fontWeight="500">{contact.name}</Typography>}
-                  secondary={contact.role}
+                  primary={<Typography fontWeight="500" color="white">{contact.name}</Typography>}
+                  secondary={<Typography variant="body2" sx={{ color: 'rgba(148, 163, 184, 0.8)' }}>{contact.role}</Typography>}
                 />
               </ListItemButton>
             ))
@@ -638,21 +687,28 @@ const ChatPage = () => {
         onClose={() => setAnchorEl(null)}
         disableRestoreFocus
       >
-        <Paper sx={{ p: 2.5, maxWidth: 350, bgcolor: 'background.paper', borderRadius: 3 }}>
+        <Paper sx={{
+          p: 2.5,
+          maxWidth: 350,
+          background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(148, 163, 184, 0.1)',
+          borderRadius: 3,
+        }}>
           {hoverLoading ? (
             <Box p={2} display="flex" justifyContent="center"><CircularProgress size={20} /></Box>
           ) : hoverData && hoverData.treatment ? (
             <Box>
               {/* Header */}
               <Box display="flex" alignItems="center" mb={2}>
-                <Avatar sx={{ width: 48, height: 48, bgcolor: 'primary.main', mr: 2 }}>
+                <Avatar sx={{ width: 48, height: 48, bgcolor: '#3b82f6', border: '2px solid rgba(59, 130, 246, 0.3)', mr: 2 }}>
                   {hoverData.patient.name?.[0]}
                 </Avatar>
                 <Box>
-                  <Typography variant="subtitle1" fontWeight="bold">
+                  <Typography variant="subtitle1" fontWeight="bold" color="white">
                     {hoverData.patient.name}
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant="caption" sx={{ color: 'rgba(148, 163, 184, 0.8)' }}>
                     {/* Fallback as schema lacks age/gender */}
                     Patient Details
                   </Typography>
@@ -664,27 +720,29 @@ const ChatPage = () => {
               {/* Active Treatment Section */}
               <Box mb={2}>
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                  <Typography variant="subtitle2" fontWeight="bold" color="text.primary">
+                  <Typography variant="subtitle2" fontWeight="bold" color="white">
                     Active Treatment
                   </Typography>
                   <Chip
                     label={hoverData.treatment.status}
-                    size="small"
-                    color={hoverData.treatment.status === 'ACTIVE' ? 'success' : 'default'}
+
+                    color={hoverData.treatment.status === TREATMENT_STATUS.ACTIVE ? 'success' : 'default'}
                     sx={{ height: 20, fontSize: '0.65rem' }}
                   />
                 </Box>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
+                <Typography variant="body2" sx={{ color: 'rgba(148, 163, 184, 0.9)' }} gutterBottom>
                   <strong>Diagnosis:</strong> {hoverData.treatment.diagnosis}
+                    // eslint-disable-next-line max-len
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  <strong>Started:</strong> {new Date(hoverData.treatment.startDate).toLocaleDateString()}
+                <Typography variant="body2" sx={{ color: 'rgba(148, 163, 184, 0.9)' }}>
+                  <strong>Started:</strong>{' '}
+                  {new Date(hoverData.treatment.startDate).toLocaleDateString()}
                 </Typography>
               </Box>
 
               {/* Medications */}
               <Box>
-                <Typography variant="caption" fontWeight="bold" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
+                <Typography variant="caption" fontWeight="bold" sx={{ display: 'block', mb: 1, color: 'rgba(148, 163, 184, 0.8)' }}>
                   MEDICATIONS
                 </Typography>
                 <Box display="flex" flexWrap="wrap" gap={0.5}>
@@ -709,7 +767,7 @@ const ChatPage = () => {
               </Box>
             </Box>
           ) : (
-            <Typography variant="body2" color="text.secondary">No active treatment data available.</Typography>
+            <Typography variant="body2" sx={{ color: 'rgba(148, 163, 184, 0.8)' }}>No active treatment data available.</Typography>
           )}
         </Paper>
       </Popover>

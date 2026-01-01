@@ -64,7 +64,8 @@ const UserManagement = () => {
                 <TableCell align="center">
                   <Chip
                     label={user.role}
-                    color={user.role === 'ADMIN' ? 'error' : user.role === 'DOCTOR' ? 'primary' : 'default'}
+
+                    color={user.role === USER_ROLES.ADMIN ? 'error' : user.role === USER_ROLES.DOCTOR ? 'primary' : 'default'}
                     size="small"
                     variant={user.isDeleted ? 'outlined' : 'filled'}
                   />
@@ -78,7 +79,7 @@ const UserManagement = () => {
                 </TableCell>
                 <TableCell align="center" sx={{color: user.isDeleted ? 'text.secondary' : 'text.primary'}}>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell align="center">
-                  {user.role !== 'ADMIN' && (
+                  {user.role !== USER_ROLES.ADMIN && (
                     <Tooltip title={user.isDeleted ? 'Activate User' : 'Deactivate User'}>
                       <IconButton
                         color={user.isDeleted ? 'success' : 'error'}
@@ -95,10 +96,16 @@ const UserManagement = () => {
         </Table>
       </TableContainer>
 
-      <Dialog open={confirmDialog.open} onClose={() => setConfirmDialog({...confirmDialog, open: false})}>
+
+        // eslint-disable-next-line max-len
+      <Dialog
+        open={confirmDialog.open}
+        onClose={() => setConfirmDialog({...confirmDialog, open: false})}
+      >
         <DialogTitle>Confirm {confirmDialog.action}</DialogTitle>
         <DialogContent>
-                    Are you sure you want to {confirmDialog.action.toLowerCase()} this user?
+          Are you sure you want to {confirmDialog.action.toLowerCase()} this
+          user?
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmDialog({...confirmDialog, open: false})}>Cancel</Button>

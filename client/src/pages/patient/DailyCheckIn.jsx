@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import {
   Container, Typography, TextField, Button, Box, FormControlLabel,
   Checkbox, Grid, Alert, Fade, Dialog, DialogTitle, DialogContent,
@@ -31,7 +31,7 @@ const DailyCheckIn = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [milestoneModal, setMilestoneModal] = useState({open: false, milestone: null});
+  const [milestoneModal, setMilestoneModal] = useState({ open: false, milestone: null });
 
   useEffect(() => {
     fetchHistory();
@@ -48,11 +48,11 @@ const DailyCheckIn = () => {
 
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setFormData({...formData, [e.target.name]: value});
+    setFormData({ ...formData, [e.target.name]: value });
   };
 
   const handlePainChange = (e, newValue) => {
-    setFormData({...formData, painLevel: newValue});
+    setFormData({ ...formData, painLevel: newValue });
   };
 
   const handleSubmit = async (e) => {
@@ -63,14 +63,14 @@ const DailyCheckIn = () => {
 
     try {
       const symptomsList = formData.symptoms.split(',').map((s) => s.trim()).filter((s) => s);
-      const res = await checkInService.submitCheckIn({...formData, symptoms: symptomsList});
+      const res = await checkInService.submitCheckIn({ ...formData, symptoms: symptomsList });
 
       setMessage('Check-in submitted successfully!');
 
       // Milestone Notification
       if (res.data.milestones && res.data.milestones.length > 0) {
         const ms = res.data.milestones[0];
-        setMilestoneModal({open: true, milestone: ms});
+        setMilestoneModal({ open: true, milestone: ms });
       }
 
       // Reset form
@@ -108,21 +108,21 @@ const DailyCheckIn = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{py: 4}}>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Header */}
-      <Box sx={{textAlign: 'center', mb: 4}}>
-        <EventAvailable sx={{fontSize: 56, color: 'primary.main', mb: 2}} />
+      <Box sx={{ textAlign: 'center', mb: 4 }}>
+        <EventAvailable sx={{ fontSize: 56, color: 'primary.main', mb: 2 }} />
         <Typography variant="h3" fontWeight={700} gutterBottom>
-                    Daily Recovery Check-In
+          Daily Recovery Check-In
         </Typography>
         <Typography variant="body1" color="text.secondary">
-                    Track your recovery progress and help your care team monitor your health
+          Track your recovery progress and help your care team monitor your health
         </Typography>
       </Box>
 
       {/* Messages */}
       <Fade in={!!message || !!error}>
-        <Box sx={{mb: 3}}>
+        <Box sx={{ mb: 3 }}>
           {message && (
             <Alert
               severity="success"
@@ -151,46 +151,68 @@ const DailyCheckIn = () => {
       </Fade>
 
       {/* Check-In Form */}
-      <AuthCard sx={{mb: 4}}>
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={4}>
-            {/* Pain Level */}
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-                <Sick /> Pain Level Assessment
-              </Typography>
-              <PainLevelSlider
-                value={formData.painLevel}
-                onChange={handlePainChange}
-              />
-            </Grid>
+      <form onSubmit={handleSubmit}>
+        {/* Pain Level Assessment Section */}
+        <Box
+          sx={{
+            mb: 4,
+            p: 4,
+            borderRadius: 3,
+            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.4) 100%)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(148, 163, 184, 0.1)',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+            <Sick sx={{ fontSize: 28, color: 'primary.main' }} />
+            <Typography variant="h5" fontWeight={600}>
+              Pain Level Assessment
+            </Typography>
+          </Box>
+          <PainLevelSlider
+            value={formData.painLevel}
+            onChange={handlePainChange}
+          />
+        </Box>
 
-            {/* Temperature */}
+        {/* Daily Vitals Section */}
+        <Box
+          sx={{
+            mb: 4,
+            p: 4,
+            borderRadius: 3,
+            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.4) 100%)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(148, 163, 184, 0.1)',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+            <Thermostat sx={{ fontSize: 28, color: 'primary.main' }} />
+            <Typography variant="h5" fontWeight={600}>
+              Daily Vitals
+            </Typography>
+          </Box>
+          <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <AuthInput
                 fullWidth
-                label="Temperature"
+                label="Temperature (°F)"
                 name="temperature"
                 type="number"
                 value={formData.temperature}
                 onChange={handleChange}
                 required
-                inputProps={{step: 0.1, min: 95, max: 105}}
-                icon={<Thermostat sx={{color: 'text.secondary', fontSize: 20}} />}
+                inputProps={{ step: 0.1, min: 95, max: 105 }}
+                placeholder="98.6"
               />
             </Grid>
-
-            {/* Medications Checkbox */}
             <Grid item xs={12} md={6}>
               <Box
                 sx={{
                   height: '100%',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'rgba(15, 23, 42, 0.5)',
-                  borderRadius: 2,
-                  p: 2,
+                  pl: { xs: 0, md: 2 },
                 }}
               >
                 <FormControlLabel
@@ -208,66 +230,97 @@ const DailyCheckIn = () => {
                     />
                   }
                   label={
-                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-                      <Medication sx={{fontSize: 20}} />
-                      <Typography>I have taken my prescribed medications</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Medication sx={{ fontSize: 22 }} />
+                      <Typography variant="body1">
+                        I have taken my prescribed medications
+                      </Typography>
                     </Box>
                   }
                 />
               </Box>
             </Grid>
+          </Grid>
+        </Box>
 
-            {/* Symptoms */}
+        {/* Health Updates Section */}
+        <Box
+          sx={{
+            mb: 4,
+            p: 4,
+            borderRadius: 3,
+            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.4) 100%)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(148, 163, 184, 0.1)',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+            <Sick sx={{ fontSize: 28, color: 'primary.main' }} />
+            <Typography variant="h5" fontWeight={600}>
+              Health Updates
+            </Typography>
+          </Box>
+          <Grid container spacing={3}>
             <Grid item xs={12}>
               <AuthInput
                 fullWidth
-                label="Symptoms (comma separated)"
+                label="Symptoms"
                 name="symptoms"
                 value={formData.symptoms}
                 onChange={handleChange}
-                helperText="e.g. Headache, Nausea, Swelling"
-                icon={<Sick sx={{color: 'text.secondary', fontSize: 20}} />}
+                placeholder="e.g. Headache, Nausea, Swelling"
+                helperText="Enter symptoms separated by commas"
               />
             </Grid>
-
-            {/* Notes */}
             <Grid item xs={12}>
               <TextField
                 fullWidth
                 label="Additional Notes"
                 name="notes"
                 multiline
-                rows={3}
+                rows={4}
                 value={formData.notes}
                 onChange={handleChange}
+                placeholder="Share any additional details about your recovery..."
                 sx={{
                   '& .MuiOutlinedInput-root': {
-                    backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                    backgroundColor: 'rgba(15, 23, 42, 0.3)',
                     backdropFilter: 'blur(8px)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(15, 23, 42, 0.4)',
+                    },
+                    '&.Mui-focused': {
+                      backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                    },
                   },
                 }}
               />
             </Grid>
-
-            {/* Submit Button */}
-            <Grid item xs={12}>
-              <AuthButton
-                type="submit"
-                loading={loading}
-                sx={{width: {xs: '100%', sm: 'auto'}, px: 6}}
-              >
-                                Submit Check-In
-              </AuthButton>
-            </Grid>
           </Grid>
-        </form>
-      </AuthCard>
+        </Box>
+
+        {/* Submit Button */}
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <AuthButton
+            type="submit"
+            loading={loading}
+            sx={{
+              width: { xs: '100%', sm: 'auto' },
+              px: 8,
+              py: 1.5,
+              fontSize: '1.1rem',
+            }}
+          >
+            Submit Check-In
+          </AuthButton>
+        </Box>
+      </form>
 
       {/* Check-In History */}
       {history.length > 0 && (
         <>
-          <Typography variant="h5" align="center" sx={{mb: 3, fontWeight: 600}}>
-                        Previous Check-Ins
+          <Typography variant="h5" align="center" sx={{ mb: 3, fontWeight: 600 }}>
+            Previous Check-Ins
           </Typography>
           <Grid container spacing={3}>
             {history.map((checkin) => (
@@ -281,15 +334,16 @@ const DailyCheckIn = () => {
                   value={`${checkin.riskScore} Risk`}
                   status={getRiskColor(checkin.riskScore)}
                   subtitle={
-                    <Box sx={{mt: 1}}>
-                      <Typography variant="body2" sx={{mb: 0.5}}>
-                                                Pain: {checkin.painLevel}/10 | Temp: {checkin.temperature}°F
+                    <Box sx={{ mt: 1 }}>
+                      <Typography variant="body2" sx={{ mb: 0.5 }}>
+                        Pain: {checkin.painLevel}/10 | Temp:{' '}
+                        {checkin.temperature}°F
                       </Typography>
-                      <Typography variant="body2" sx={{mb: 0.5}}>
-                                                Meds: {checkin.medicationsTaken ? '✓ Taken' : '✗ Not Taken'}
+                      <Typography variant="body2" sx={{ mb: 0.5 }}>
+                        Meds: {checkin.medicationsTaken ? '✓ Taken' : '✗ Not Taken'}
                       </Typography>
                       {checkin.riskReasons && checkin.riskReasons.length > 0 && (
-                        <Box sx={{mt: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                        <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {checkin.riskReasons.map((reason, idx) => (
                             <Chip
                               key={idx}
@@ -316,34 +370,34 @@ const DailyCheckIn = () => {
       {/* Milestone Modal */}
       <Dialog
         open={milestoneModal.open}
-        onClose={() => setMilestoneModal({open: false, milestone: null})}
+        onClose={() => setMilestoneModal({ open: false, milestone: null })}
         PaperProps={{
           sx: {
             background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%)',
             backdropFilter: 'blur(20px)',
             border: '1px solid rgba(148, 163, 184, 0.1)',
             borderRadius: 3,
-            minWidth: {xs: '90%', sm: 400},
+            minWidth: { xs: '90%', sm: 400 },
           },
         }}
       >
-        <DialogTitle sx={{textAlign: 'center', pt: 4}}>
-          <EmojiEvents sx={{fontSize: 72, color: '#ffd700', mb: 2}} />
+        <DialogTitle sx={{ textAlign: 'center', pt: 4 }}>
+          <EmojiEvents sx={{ fontSize: 72, color: '#ffd700', mb: 2 }} />
           <Typography variant="h4" fontWeight={700}>
-                        Milestone Unlocked!
+            Milestone Unlocked!
           </Typography>
         </DialogTitle>
-        <DialogContent sx={{textAlign: 'center', pb: 2}}>
+        <DialogContent sx={{ textAlign: 'center', pb: 2 }}>
           <Typography variant="h5" color="primary" fontWeight={600}>
-                        🎉 {getMilestoneText(milestoneModal.milestone)}
+            🎉 {getMilestoneText(milestoneModal.milestone)}
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{mt: 2}}>
-                        Keep up the great work on your recovery journey!
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+            Keep up the great work on your recovery journey!
           </Typography>
         </DialogContent>
-        <DialogActions sx={{justifyContent: 'center', pb: 3}}>
-          <AuthButton onClick={() => setMilestoneModal({open: false, milestone: null})}>
-                        Continue
+        <DialogActions sx={{ justifyContent: 'center', pb: 3 }}>
+          <AuthButton onClick={() => setMilestoneModal({ open: false, milestone: null })}>
+            Continue
           </AuthButton>
         </DialogActions>
       </Dialog>

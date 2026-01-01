@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useContext} from 'react';
+import React, {useEffect, useRef, useContext, useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
 import AuthContext from '@/context/AuthContext';
 import chatService from '@/services/chatService';
@@ -23,29 +23,30 @@ const NotificationManager = () => {
   const lastCheckRef = useRef(Date.now());
   const pollingIntervalRef = useRef(null);
 
-  useEffect(() => {
-    if (!user) return;
-
-    // Request Browser Notification Permission
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
-    }
-
-    startPolling();
-
-    return () => stopPolling();
-  }, [user]);
-
-  const startPolling = () => {
-    stopPolling();
-    pollingIntervalRef.current = setInterval(checkForNewMessages, 30000); // Check every 30s
-  };
-
   const stopPolling = () => {
     if (pollingIntervalRef.current) clearInterval(pollingIntervalRef.current);
   };
 
-  const checkForNewMessages = async () => {
+  const getOtherParticipantName = (conv, myId) => {
+    const other = conv.participants.find((p) => p._id !== myId);
+    return other ? other.name : 'System';
+  };
+
+  const triggerNotification = (message) => {
+    // 1. In-App Snackbar
+    setNotification({message});
+    setOpen(true);
+
+    // 2. Browser Notification
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('Smart Patient Tracker', {
+        body: message,
+        icon: '/logo192.png', // Default react logo if exists
+      });
+    }
+  };
+
+  const checkForNewMessages = useCallback(async () => {
     try {
       // Get conversations sorted by lastMessage
       const res = await chatService.getConversations();
@@ -55,6 +56,7 @@ const NotificationManager = () => {
 
       // Find any conversation with new message since last check
       // AND last message sender is NOT me
+      // eslint-disable-next-line max-len
       // AND last message is newer than my read status (if implemented) or just simpler check against time
 
       const lastCheck = lastCheckRef.current;
@@ -90,26 +92,25 @@ const NotificationManager = () => {
     } catch (err) {
       console.error('Notification Poll Error:', err);
     }
-  };
+  }, [user]);
 
-  const getOtherParticipantName = (conv, myId) => {
-    const other = conv.participants.find((p) => p._id !== myId);
-    return other ? other.name : 'System';
-  };
+  const startPolling = useCallback(() => {
+    stopPolling();
+    pollingIntervalRef.current = setInterval(checkForNewMessages, 30000); // Check every 30s
+  }, [checkForNewMessages]);
 
-  const triggerNotification = (message) => {
-    // 1. In-App Snackbar
-    setNotification({message});
-    setOpen(true);
+  useEffect(() => {
+    if (!user) return;
 
-    // 2. Browser Notification
-    if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification('Smart Patient Tracker', {
-        body: message,
-        icon: '/logo192.png', // Default react logo if exists
-      });
+    // Request Browser Notification Permission
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
     }
-  };
+
+    startPolling();
+
+    return () => stopPolling();
+  }, [user, startPolling]);
 
   const handleClose = () => setOpen(false);
 

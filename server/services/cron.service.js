@@ -62,17 +62,22 @@ const generateAlert = async (plan, level, message) => {
   });
 
   if (existing) {
-    // If we want to escalate, we check if the existing one is Warning and new is Critical.
-    // For simplicity: If ANY active missed checkin alert exists, we skip creating another UNLESS the message is different (Escalation).
+    // If we want to escalate, we check if the existing one is Warning
+    // and new is Critical.
+    // For simplicity: If ANY active missed checkin alert exists,
+    // we skip creating another UNLESS the message is different (Escalation).
     if (existing.message === message) {
       return; // Exactly same alert pending
     }
 
-    // If existing is Warning and new is Critical, we might want to resolve old and create new, or just create new.
-    // Implementation Plan says: "Check for existing *unresolved* Alert of same type... to prevent spam".
+    // If existing is Warning and new is Critical, we might want to
+    // resolve old and create new, or just create new.
+    // Implementation Plan says: "Check for existing *unresolved*
+    // Alert of same type... to prevent spam".
 
     // Let's resolve the old one if it was a Warning and we are now Critical.
-    if (message.includes('Critical') && existing.message.includes('Warning')) {
+    if (message.includes('Critical') &&
+      existing.message.includes('Warning')) {
       existing.status = 'RESOLVED';
       await existing.save();
       // And proceed to create Critical

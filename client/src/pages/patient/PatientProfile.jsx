@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Container, Typography, Box, Grid, TextField, MenuItem, FormControl,
   InputLabel, Select, FormControlLabel, Switch, CircularProgress, Alert, Fade,
@@ -13,12 +13,12 @@ import AuthCard from '@/components/auth/AuthCard';
 import AuthButton from '@/components/auth/AuthButton';
 
 const steps = [
-  { label: 'Basic Info', icon: <Person /> },
-  { label: 'Emergency Contact', icon: <ContactEmergency /> },
-  { label: 'Medical History', icon: <LocalHospital /> },
-  { label: 'Vitals', icon: <FitnessCenter /> },
-  { label: 'Lifestyle', icon: <Restaurant /> },
-  { label: 'Consent', icon: <VerifiedUser /> },
+  {label: 'Basic Info', icon: <Person />},
+  {label: 'Emergency Contact', icon: <ContactEmergency />},
+  {label: 'Medical History', icon: <LocalHospital />},
+  {label: 'Vitals', icon: <FitnessCenter />},
+  {label: 'Lifestyle', icon: <Restaurant />},
+  {label: 'Consent', icon: <VerifiedUser />},
 ];
 
 const PatientProfile = () => {
@@ -30,16 +30,16 @@ const PatientProfile = () => {
   const [formData, setFormData] = useState({
     basicInfo: {
       fullName: '', dateOfBirth: '', gender: '', bloodGroup: '', phoneNumber: '',
-      address: { street: '', city: '', state: '', zipCode: '' },
+      address: {street: '', city: '', state: '', zipCode: ''},
     },
-    emergencyContact: { name: '', relationship: '', phoneNumber: '' },
+    emergencyContact: {name: '', relationship: '', phoneNumber: ''},
     medicalHistory: {
       allergies: '', chronicConditions: '', currentMedications: '', pastSurgeries: '',
       smokingStatus: '', alcoholConsumption: '',
     },
-    vitals: { heightCm: '', weightKg: '', normalBodyTemp: '', normalBPRange: '' },
-    lifestyle: { activityLevel: '', dietPreference: '', sleepHoursAvg: '', occupationType: '' },
-    consent: { dataSharing: false, notificationPreference: 'In-App', preferredLanguage: 'English', caregiverAccess: false },
+    vitals: {heightCm: '', weightKg: '', normalBodyTemp: '', normalBPRange: ''},
+    lifestyle: {activityLevel: '', dietPreference: '', sleepHoursAvg: '', occupationType: ''},
+    consent: {dataSharing: false, notificationPreference: 'In-App', preferredLanguage: 'English', caregiverAccess: false},
   });
 
   useEffect(() => {
@@ -189,7 +189,7 @@ const PatientProfile = () => {
                 fullWidth
                 label="Date of Birth"
                 type="date"
-                InputLabelProps={{ shrink: true }}
+                InputLabelProps={{shrink: true}}
                 value={formData.basicInfo.dateOfBirth ? new Date(formData.basicInfo.dateOfBirth).toISOString().split('T')[0] : ''}
                 onChange={(e) => handleChange('basicInfo', 'dateOfBirth', e.target.value)}
                 sx={inputSx}
@@ -203,7 +203,7 @@ const PatientProfile = () => {
                 value={formData.basicInfo.gender}
                 onChange={(e) => handleChange('basicInfo', 'gender', e.target.value)}
                 sx={inputSx}
-                SelectProps={{ native: false }}
+                SelectProps={{native: false}}
               >
                 <MenuItem value="Male">Male</MenuItem>
                 <MenuItem value="Female">Female</MenuItem>
@@ -219,7 +219,7 @@ const PatientProfile = () => {
                 value={formData.basicInfo.bloodGroup}
                 onChange={(e) => handleChange('basicInfo', 'bloodGroup', e.target.value)}
                 sx={inputSx}
-                SelectProps={{ native: false }}
+                SelectProps={{native: false}}
               >
                 {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map((bg) => <MenuItem key={bg} value={bg}>{bg}</MenuItem>)}
               </TextField>
@@ -524,54 +524,54 @@ const PatientProfile = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container maxWidth="md" sx={{py: 4}}>
       <AuthCard>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
           <Typography variant="h4" fontWeight={700}>My Health Profile</Typography>
           <AuthButton
             variant="outlined"
             size="small"
-            startIcon={<Download sx={{ fontSize: 18 }} />}
+            startIcon={<Download sx={{fontSize: 18}} />}
             onClick={async () => {
               try {
                 const res = await profileService.exportData();
                 const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-                  JSON.stringify(res.data.data, null, 2),
+                    JSON.stringify(res.data.data, null, 2),
                 )}`;
                 const link = document.createElement('a');
                 link.href = jsonString;
                 link.download = `my_health_data_${new Date().toISOString().slice(0, 10)}.json`;
                 link.click();
-              } catch (_err) {
+              } catch {
                 setError('Export failed');
               }
             }}
-            sx={{ px: 2, py: 1, fontSize: '0.875rem' }}
+            sx={{px: 2, py: 1, fontSize: '0.875rem'}}
           >
             Export
           </AuthButton>
         </Box>
 
-        {error && <Fade in={!!error}><Alert severity="error" sx={{ mb: 2 }}>{error}</Alert></Fade>}
-        {successMessage && <Fade in={!!successMessage}><Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert></Fade>}
+        {error && <Fade in={!!error}><Alert severity="error" sx={{mb: 2}}>{error}</Alert></Fade>}
+        {successMessage && <Fade in={!!successMessage}><Alert severity="success" sx={{mb: 2}}>{successMessage}</Alert></Fade>}
 
         <ProgressStepper
           steps={steps}
           activeStep={activeStep}
-          completedSteps={Array.from({ length: activeStep }, (_, i) => i)}
-          sx={{ mb: 4 }}
+          completedSteps={Array.from({length: activeStep}, (_, i) => i)}
+          sx={{mb: 4}}
         />
 
         <Box>
           {renderStepContent(activeStep)}
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+          <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 4}}>
             <AuthButton
               disabled={activeStep === 0}
               onClick={handleBack}
               variant="outlined"
               size="medium"
-              sx={{ minWidth: 100 }}
+              sx={{minWidth: 100}}
             >
               Back
             </AuthButton>
@@ -579,7 +579,7 @@ const PatientProfile = () => {
               <AuthButton
                 onClick={handleSubmit}
                 size="medium"
-                sx={{ minWidth: 120 }}
+                sx={{minWidth: 120}}
               >
                 Save Profile
               </AuthButton>
@@ -587,7 +587,7 @@ const PatientProfile = () => {
               <AuthButton
                 onClick={handleNext}
                 size="medium"
-                sx={{ minWidth: 100 }}
+                sx={{minWidth: 100}}
               >
                 Next
               </AuthButton>

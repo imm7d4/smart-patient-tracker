@@ -1,5 +1,6 @@
 const TreatmentPlanRepository = require('../repositories/TreatmentPlanRepository');
 const UserRepository = require('../repositories/UserRepository');
+const {USER_ROLES} = require('../constants');
 
 class TreatmentService {
   /**
@@ -43,9 +44,9 @@ class TreatmentService {
     let query = {};
 
     // Business logic: Filter based on role
-    if (role === 'PATIENT') {
+    if (role === USER_ROLES.PATIENT) {
       query = {patientId: userId};
-    } else if (role === 'DOCTOR') {
+    } else if (role === USER_ROLES.DOCTOR) {
       query = {doctorId: userId};
       // Allow filtering by patientId if provided
       if (filters.patientId) {
@@ -80,10 +81,10 @@ class TreatmentService {
     }
 
     // Business validation: Authorization check
-    if (role === 'PATIENT' && plan.patientId._id.toString() !== userId) {
+    if (role === USER_ROLES.PATIENT && plan.patientId._id.toString() !== userId) {
       throw new Error('Not authorized');
     }
-    if (role === 'DOCTOR' && plan.doctorId._id.toString() !== userId) {
+    if (role === USER_ROLES.DOCTOR && plan.doctorId._id.toString() !== userId) {
       throw new Error('Not authorized');
     }
 

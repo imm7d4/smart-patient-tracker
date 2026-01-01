@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import {Container, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, TextField, MenuItem, Select, FormControl, InputLabel, Grid, TablePagination} from '@mui/material';
 import adminService from '@/services/adminService';
 
@@ -14,11 +14,7 @@ const AuditLogsPage = () => {
     endDate: new Date().toISOString().split('T')[0],
   });
 
-  useEffect(() => {
-    fetchLogs();
-  }, [page, rowsPerPage, filters]); // Fetch whenever these change
-
-  const fetchLogs = async () => {
+  const fetchLogs = useCallback(async () => {
     try {
       const params = {
         page: page + 1, // API is 1-indexed
@@ -34,7 +30,11 @@ const AuditLogsPage = () => {
     } catch (error) {
       console.error('Error fetching logs', error);
     }
-  };
+  }, [page, rowsPerPage, filters]);
+
+  useEffect(() => {
+    fetchLogs();
+  }, [fetchLogs]); // Fetch whenever these change
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -175,7 +175,7 @@ const AuditLogsPage = () => {
                     </Box>
                     {log.targetId && (
                       <Typography variant="caption" display="block" color="primary">
-                                                Target: {log.targetId.name} ({log.targetId.email})
+                        Target: {log.targetId.name} ({log.targetId.email})
                       </Typography>
                     )}
                     <Typography variant="caption" display="block" color="text.secondary">

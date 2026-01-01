@@ -1,4 +1,4 @@
-import {createTheme} from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
@@ -151,6 +151,45 @@ const theme = createTheme({
         root: {
           paddingTop: '2rem',
           paddingBottom: '2rem',
+        },
+      },
+    },
+    MuiSelect: {
+      defaultProps: {
+        MenuProps: {
+          PaperProps: {
+            sx: {
+              backgroundColor: '#1e293b',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(148, 163, 184, 0.2)',
+              marginTop: '8px',
+              minWidth: '200px',
+            },
+          },
+        },
+      },
+      styleOverrides: {
+        root: {
+          minWidth: '200px',
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          'backgroundColor': '#1e293b',
+          'color': '#ffffff',
+          'padding': '12px 16px',
+          'fontSize': '1rem',
+          '\u0026:hover': {
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+          },
+          '\u0026.Mui-selected': {
+            backgroundColor: 'rgba(59, 130, 246, 0.3)',
+          },
+          '\u0026.Mui-selected:hover': {
+            backgroundColor: 'rgba(59, 130, 246, 0.4)',
+          },
         },
       },
     },

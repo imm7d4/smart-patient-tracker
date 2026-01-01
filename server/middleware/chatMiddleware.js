@@ -50,7 +50,9 @@ const chatGuard = async (req, res, next) => {
 
     // 3. Existing Conversation Access Logic
     // Extract conversationId from params or body
-    const conversationId = req.params?.conversationId || req.body?.conversationId || req.query?.conversationId;
+    const conversationId = req.params?.conversationId ||
+      req.body?.conversationId ||
+      req.query?.conversationId;
 
     if (conversationId) {
       const conversation = await Conversation.findById(conversationId);

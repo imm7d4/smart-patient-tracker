@@ -68,7 +68,10 @@ const DoctorDashboard = () => {
                 <TableCell align="center">
                   <Tooltip title={status.latestCheckIn.riskReasons ? status.latestCheckIn.riskReasons.join(', ') : ''} arrow>
                     <Chip
-                      label={status.latestCheckIn.riskLevel || getRiskLabel(status.latestCheckIn.riskScore)}
+                      label={
+                        // eslint-disable-next-line max-len
+                        status.latestCheckIn.riskLevel || getRiskLabel(status.latestCheckIn.riskScore)
+                      }
                       color={getRiskColor(status.latestCheckIn.riskScore)}
                       variant="filled"
                     />
