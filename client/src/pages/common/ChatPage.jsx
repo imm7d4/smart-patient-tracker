@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useContext} from 'react';
+import React, {useState, useEffect, useRef, useContext, useCallback} from 'react';
 import {
   Box, Grid, Paper, Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar,
   Divider, TextField, IconButton, Badge, CircularProgress, Alert, Fab, Dialog, DialogTitle,
@@ -57,16 +57,12 @@ const ChatPage = () => {
     scrollToBottom();
   }, [messages]);
 
-  useEffect(() => {
-    if (activeConversation) {
-      setMessages([]);
-      lastSyncRef.current = null;
-      fetchMessages(activeConversation._id);
-      startPolling(activeConversation._id);
-    } else {
-      stopPolling();
+  const stopPolling = () => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
     }
-  }, [activeConversation]);
+  };
 
   const fetchConversations = async () => {
     try {
@@ -78,7 +74,7 @@ const ChatPage = () => {
     }
   };
 
-  const fetchMessages = async (conversationId) => {
+  const fetchMessages = useCallback(async (conversationId) => {
     try {
       const since = lastSyncRef.current;
       const res = await chatService.getMessages(conversationId, since);
@@ -98,23 +94,27 @@ const ChatPage = () => {
     } catch (error) {
       console.error('Polling error', error);
     }
-  };
+  }, []);
 
-  const startPolling = (conversationId) => {
+  const startPolling = useCallback((conversationId) => {
     stopPolling();
     pollingIntervalRef.current = setInterval(() => {
       if (isTabActiveRef.current && conversationId) {
         fetchMessages(conversationId);
       }
     }, 3000);
-  };
+  }, [fetchMessages]);
 
-  const stopPolling = () => {
-    if (pollingIntervalRef.current) {
-      clearInterval(pollingIntervalRef.current);
-      pollingIntervalRef.current = null;
+  useEffect(() => {
+    if (activeConversation) {
+      setMessages([]);
+      lastSyncRef.current = null;
+      fetchMessages(activeConversation._id);
+      startPolling(activeConversation._id);
+    } else {
+      stopPolling();
     }
-  };
+  }, [activeConversation, fetchMessages, startPolling]);
 
   const handleSend = async () => {
     if (!newMessage.trim() || !activeConversation) return;

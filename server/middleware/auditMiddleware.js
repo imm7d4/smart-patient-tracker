@@ -22,7 +22,7 @@ const auditLogger = async (req, res, next) => {
           // Let's rely on req.user if available later.
         }
       }
-    } catch (_e) {
+    } catch {
       // Ignore
     }
   }
@@ -30,7 +30,8 @@ const auditLogger = async (req, res, next) => {
   // Capture original end function to intercept
   const _originalEnd = res.end;
 
-  // We can just log immediately or on finish. "EACH AND EVERY ACTION" implies request receipt usually.
+  // We can just log immediately or on finish.
+  // "EACH AND EVERY ACTION" implies request receipt usually.
   // But logging on finish allows capturing status code.
 
   res.on('finish', () => {
@@ -42,7 +43,9 @@ const auditLogger = async (req, res, next) => {
     if (req.originalUrl === '/') return;
 
     AuditLog.create({
-      userId: req.user ? req.user.id : userId, // req.user might be set by auth middleware running before this? No, we likely put this first or after.
+      // req.user might be set by auth middleware running before this?
+      // No, we likely put this first or after.
+      userId: req.user ? req.user.id : userId,
       // If we put this BEFORE auth middleware, req.user is undefined.
       // If we put it AFTER, we miss 401s.
       // Best to put it first, and try to extract token manually as above.

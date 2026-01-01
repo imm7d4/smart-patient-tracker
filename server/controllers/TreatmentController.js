@@ -7,7 +7,10 @@ class TreatmentController {
      */
   async createTreatment(req, res) {
     try {
-      const {patientId, diagnosis, startDate, expectedDays, medications, symptomChecklist} = req.body;
+      const {
+        patientId, diagnosis, startDate, expectedDays,
+        medications, symptomChecklist,
+      } = req.body;
 
       // Basic shape validation
       if (!patientId || !diagnosis || !startDate) {
@@ -62,7 +65,7 @@ class TreatmentController {
       res.json({success: true, data: plan});
     } catch (error) {
       const statusCode = error.message === 'Treatment plan not found' ? 404 :
-                error.message === 'Not authorized' ? 403 : 500;
+        error.message === 'Not authorized' ? 403 : 500;
       res.status(statusCode).json({success: false, message: error.message});
     }
   }
@@ -114,7 +117,7 @@ class TreatmentController {
       res.json({success: true, data: plan});
     } catch (error) {
       const statusCode = error.message === 'Treatment plan not found' ? 404 :
-                error.message === 'Not authorized' ? 403 : 500;
+        error.message === 'Not authorized' ? 403 : 500;
       res.status(statusCode).json({success: false, message: error.message});
     }
   }

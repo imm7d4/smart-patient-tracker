@@ -77,9 +77,9 @@ class AdminService {
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
       const messages = await MessageRepository.findByConversation(
-                conversationIds.length > 0 ? conversationIds[0] : null,
-                {createdAt: {$gte: thirtyDaysAgo}},
-                1000,
+        conversationIds.length > 0 ? conversationIds[0] : null,
+        {createdAt: {$gte: thirtyDaysAgo}},
+        1000,
       );
 
       let totalResponseTime = 0;
@@ -109,8 +109,10 @@ class AdminService {
         }
       });
 
-      const avgResponseTime = responseCount > 0 ? (totalResponseTime / responseCount).toFixed(1) : 0;
-      const responseRate24h = responseCount > 0 ? Math.round((within24hCount / responseCount) * 100) : 0;
+      const avgResponseTime = responseCount > 0 ?
+        (totalResponseTime / responseCount).toFixed(1) : 0;
+      const responseRate24h = responseCount > 0 ?
+        Math.round((within24hCount / responseCount) * 100) : 0;
 
       return {
         ...doc,

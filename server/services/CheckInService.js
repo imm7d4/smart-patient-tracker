@@ -84,10 +84,15 @@ class CheckInService {
 
     // 1. Pain Improvement Milestone
     if (!hasMilestone('PAIN_IMPROVEMENT')) {
-      const firstCheckIn = await DailyCheckInRepository.findFirstCheckInSinceDate(userId, plan.startDate);
+      const firstCheckIn =
+        await DailyCheckInRepository.findFirstCheckInSinceDate(
+            userId, plan.startDate,
+        );
 
       if (firstCheckIn && firstCheckIn.painLevel > 0) {
-        const improvement = ((firstCheckIn.painLevel - checkIn.painLevel) / firstCheckIn.painLevel) * 100;
+        const improvement =
+          ((firstCheckIn.painLevel - checkIn.painLevel) /
+            firstCheckIn.painLevel) * 100;
         if (improvement >= painImprovementTarget) {
           const milestone = {
             type: 'PAIN_IMPROVEMENT',
@@ -113,7 +118,10 @@ class CheckInService {
 
     // 2. Medication Streak Milestone
     if (!hasMilestone('MEDICATION_STREAK')) {
-      const recentCheckIns = await DailyCheckInRepository.findRecentCheckIns(userId, medicationStreakDays);
+      const recentCheckIns =
+        await DailyCheckInRepository.findRecentCheckIns(
+            userId, medicationStreakDays,
+        );
 
       if (recentCheckIns.length >= medicationStreakDays) {
         const allTaken = recentCheckIns.every((c) => c.medicationsTaken);
