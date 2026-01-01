@@ -1,6 +1,7 @@
 const ConversationRepository = require('../repositories/ConversationRepository');
 const MessageRepository = require('../repositories/MessageRepository');
 const TreatmentPlanRepository = require('../repositories/TreatmentPlanRepository');
+const { USER_ROLES } = require('../constants');
 
 class ChatService {
   /**
@@ -41,7 +42,7 @@ class ChatService {
      * @returns {Promise<Array>} Array of conversations
      */
   async getConversations(userId) {
-    const conversations = await ConversationRepository.findByParticipant(userId, {isActive: true});
+    const conversations = await ConversationRepository.findByParticipant(userId, { isActive: true });
     return conversations;
   }
 
@@ -99,9 +100,9 @@ class ChatService {
      */
   async markAsRead(conversationId, userId, timestamp) {
     await ConversationRepository.updateReadStatus(
-        conversationId,
-        userId,
-        new Date(timestamp || Date.now()),
+      conversationId,
+      userId,
+      new Date(timestamp || Date.now()),
     );
   }
 
@@ -112,7 +113,7 @@ class ChatService {
      * @returns {Promise<Array>} Array of contacts
      */
   async getContacts(userId, role) {
-    const query = {status: 'ACTIVE'};
+    const query = { status: 'ACTIVE' };
 
     if (role === USER_ROLES.PATIENT) {
       query.patientId = userId;
